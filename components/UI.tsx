@@ -5,19 +5,22 @@ export interface SketchyButtonProps {
   children: React.ReactNode;
   primary?: boolean;
   className?: string;
+  onClick?: () => void;
+  noAnimate?: boolean;
 }
 
-export const SketchyButton: React.FC<SketchyButtonProps> = ({ children, primary = false, className = '' }) => {
+export const SketchyButton: React.FC<SketchyButtonProps> = ({ children, primary = false, className = '', onClick, noAnimate = false }) => {
   return (
     <motion.button
-      whileHover={{ scale: 1.05, rotate: -2, y: -5 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={noAnimate ? undefined : { scale: 1.05, rotate: -2, y: -5 }}
+      whileTap={noAnimate ? undefined : { scale: 0.95 }}
+      onClick={onClick}
       className={`
         relative px-8 py-3 font-black text-lg font-hand tracking-wide
         border-2 rounded-tl-2xl rounded-br-3xl rounded-tr-sm rounded-bl-sm
-        transition-colors duration-300
+        transition-colors duration-300 cursor-pointer
         ${primary 
-          ? 'bg-lime-400 text-emerald-950 border-emerald-950 shadow-[5px_5px_0px_0px_#064e3b]' 
+          ? 'bg-lime-400 text-emerald-950 border-emerald-950 shadow-[5px_5px_0px_0px_#064e3b] hover:bg-lime-500  ' 
           : 'bg-transparent text-lime-400 border-lime-400 shadow-[5px_5px_0px_0px_rgba(132,204,22,0.3)] hover:bg-lime-400/10'
         }
         ${className}
@@ -33,22 +36,23 @@ export interface GlassCardProps {
   className?: string;
   rotate?: number;
   style?: React.CSSProperties;
+  noHover?: boolean;
 }
 
-export const GlassCard: React.FC<GlassCardProps> = ({ children, className = '', rotate = 0, style }) => {
+export const GlassCard: React.FC<GlassCardProps> = ({ children, className = '', rotate = 0, style, noHover = false }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20, rotate: rotate }}
       whileInView={{ opacity: 1, y: 0, rotate: rotate }}
       viewport={{ once: true }}
-      whileHover={{ y: -10, rotate: 0, boxShadow: '10px 10px 0px 0px rgba(0,0,0,0.3)' }}
+      whileHover={noHover ? undefined : { y: -10, rotate: 0, boxShadow: '10px 10px 0px 0px rgba(0,0,0,0.3)' }}
       style={style}
       className={`
         bg-white/5 backdrop-blur-md border border-white/10
         p-6 md:p-8
         rounded-tl-3xl rounded-br-2xl rounded-tr-lg rounded-bl-xl
         shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]
-        hover:border-lime-400/50 transition-all duration-300
+        ${!noHover && 'hover:border-lime-400/50'} transition-all duration-300
         ${className}
       `}
     >

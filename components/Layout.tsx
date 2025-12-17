@@ -54,8 +54,24 @@ const Navbar = () => {
     { path: '/practices', label: 'Praktyki Studenckie' },
   ];
 
+  const [isScrolled, setIsScrolled] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 p-4 md:p-6 pointer-events-none">
+    <nav 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
+        isScrolled 
+          ? 'bg-emerald-950/80 backdrop-blur-md shadow-lg py-3 border-emerald-800/50' 
+          : 'p-4 md:p-6 pointer-events-none border-transparent'
+      }`}
+    >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <motion.div 
@@ -63,8 +79,8 @@ const Navbar = () => {
           animate={{ opacity: 1, x: 0 }}
           className="pointer-events-auto"
         >
-          <div className="font-black text-2xl tracking-tighter text-white font-hand -rotate-2 border-2 border-dashed border-lime-400 p-2 rounded-tl-xl rounded-br-xl shadow-[4px_4px_0px_0px_#84cc16] bg-emerald-900/80 backdrop-blur-md">
-            Rekord<span className="text-lime-400">IT</span>
+          <div className="bg-white/95 p-1.5 rounded-xl shadow-[4px_4px_0px_0px_#84cc16] border-2 border-lime-400 cursor-pointer">
+            <img src="/si.png" alt="RekordIT Logo" className="h-6 w-auto object-contain" />
           </div>
         </motion.div>
 
@@ -73,16 +89,15 @@ const Navbar = () => {
           {links.map((link) => (
             <NavLink key={link.path} to={link.path}>
               {({ isActive }) => (
-                <motion.div
-                  whileHover={{ y: -5, rotate: 2 }}
-                  className={`px-4 py-2 font-bold font-hand text-lg rounded-lg border-2 transition-all duration-300 ${
+                <div
+                  className={`px-4 py-2 font-bold text-sm tracking-wide uppercase rounded-lg border-2 transition-all duration-300 ${
                     isActive 
-                      ? 'bg-lime-400 text-emerald-950 border-emerald-950 -rotate-1 shadow-[4px_4px_0px_0px_#022c22]' 
+                      ? 'bg-lime-400 text-emerald-950 border-emerald-950 shadow-[4px_4px_0px_0px_#022c22]' 
                       : 'bg-emerald-900/40 text-emerald-100 border-emerald-400/30 backdrop-blur hover:bg-emerald-800/60'
                   }`}
                 >
                   {link.label}
-                </motion.div>
+                </div>
               )}
             </NavLink>
           ))}
@@ -111,7 +126,7 @@ const Navbar = () => {
               key={link.path} 
               to={link.path} 
               onClick={() => setIsOpen(false)}
-              className={({ isActive }) => `text-xl font-hand font-bold p-2 ${isActive ? 'text-lime-400 underline decoration-wavy' : 'text-white'}`}
+              className={({ isActive }) => `text-lg font-bold p-2 transition-colors ${isActive ? 'text-lime-400' : 'text-white hover:text-lime-400'}`}
             >
               {link.label}
             </NavLink>
@@ -139,8 +154,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             
             {/* Brand Column */}
             <div className="md:col-span-1 space-y-6">
-              <div className="font-black text-2xl tracking-tighter text-white font-hand -rotate-2 border-2 border-dashed border-lime-400 p-2 inline-block rounded-tl-xl rounded-br-xl shadow-[4px_4px_0px_0px_#84cc16] bg-emerald-900/80">
-                Rekord<span className="text-lime-400">IT</span>
+              <div className="bg-white/95 p-3 rounded-xl shadow-[4px_4px_0px_0px_#84cc16] border-2 border-lime-400 inline-block mb-6">
+                <img src="/si.png" alt="RekordIT Logo" className="h-14 w-auto object-contain" />
               </div>
               <p className="text-emerald-200/70 text-sm leading-relaxed font-light">
                 Tworzymy innowacyjne oprogramowanie i budujemy zespoły ekspertów od ponad 35 lat. Dołącz do nas i zmieniaj świat IT.

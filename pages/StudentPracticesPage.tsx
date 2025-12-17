@@ -146,7 +146,7 @@ const StudentPracticesPage = () => {
               whileInView={{ opacity: 1, x: 0 }}
               className={`flex items-center mb-8 ${item.align === 'right' ? 'md:flex-row-reverse' : ''} ${item.align === 'center' ? 'flex-col md:flex-col justify-center' : ''}`}
             >
-              <div className={`w-full md:w-1/2 px-8 ${item.align === 'right' ? 'text-right' : item.align === 'center' ? 'text-center' : 'text-left'}`}>
+              <div className={`w-full md:w-1/2 px-4 ${item.align === 'right' ? 'text-left' : item.align === 'center' ? 'text-center' : 'text-right'}`}>
                 <div className={`inline-block p-4 rounded-xl border-2 ${item.special ? 'bg-lime-400 text-black border-black shadow-[4px_4px_0_0_#fff]' : 'bg-emerald-900/50 border-lime-400/30'}`}>
                   <div className="text-xl font-black font-hand">{item.date}</div>
                   <div className={`text-sm uppercase font-bold ${item.special ? 'text-emerald-900' : 'text-emerald-400'}`}>{item.event}</div>

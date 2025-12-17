@@ -175,9 +175,9 @@ const InternshipPage = () => {
       {/* RECRUITMENT TIMELINE (Horizontal/Hybrid) */}
       <section>
         <SectionHeader title="Oś czasu" subtitle="Szybka ścieżka do kariery" />
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center relative gap-8 md:gap-0">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-start relative gap-8 md:gap-0">
           {/* Sketchy Line */}
-          <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 border-t-2 border-dashed border-lime-400/30 -z-10" />
+          <div className="hidden md:block absolute top-[23px] left-0 w-full h-1 border-t-2 border-dashed border-lime-400/30 -z-10" />
           
           {[
             { date: "10.08", title: "Aplikacja" },

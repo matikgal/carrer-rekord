@@ -172,14 +172,14 @@ const CareerPage = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="relative z-10"
         >
-          <span className="inline-block mb-8 px-6 py-2 rounded-full border border-lime-400/50 bg-lime-400/10 text-lime-400 font-hand font-bold text-lg tracking-wider animate-pulse shadow-[0_0_15px_rgba(132,204,22,0.3)]">
-            We are hiring!
+          <span className="inline-block mb-8 px-6 py-2 rounded-full border border-lime-400/50 bg-lime-400/10 text-lime-400 font-bold text-sm tracking-widest uppercase animate-pulse shadow-[0_0_15px_rgba(132,204,22,0.3)]">
+            REKRUTUJEMY
           </span>
-          <h1 className="text-6xl md:text-8xl font-black mb-8 leading-loose tracking-widest drop-shadow-2xl">
+          <h1 className="text-6xl md:text-8xl font-mono font-black mb-12 leading-[1.3] tracking-tight drop-shadow-2xl">
             Rozwijaj się z <br/>
             <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-lime-300 via-emerald-300 to-teal-300 filter drop-shadow-md">
               liderem IT
-              <svg className="absolute -bottom-6 left-0 w-full h-6 text-lime-400 z-[-1] opacity-80" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00026 6.99997C52.0003 2.99999 150.003 -3.00001 198.003 4.99999" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="10 10"/></svg>
+              <svg className="absolute -bottom-6 left-0 w-full h-8 text-lime-400 z-[-1] opacity-80" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00026 6.99997C52.0003 2.99999 150.003 -3.00001 198.003 4.99999" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="10 10"/></svg>
             </span>
           </h1>
           <p className="text-xl md:text-3xl text-emerald-100/90 mb-12 max-w-3xl mx-auto font-light leading-relaxed tracking-wide">
@@ -194,7 +194,7 @@ const CareerPage = () => {
 
       {/* STATS SECTION (The Graph) */}
       <section className="relative">
-        <GlassCard className="border-lime-400/20 bg-emerald-900/40">
+        <GlassCard className="border-lime-400/20 bg-emerald-900/40" noHover>
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h3 className="text-3xl font-bold mb-4 tracking-wide">Stabilny rozwój przez ponad <span className="text-lime-400 font-hand text-5xl">35 lat</span></h3>
@@ -213,30 +213,75 @@ const CareerPage = () => {
               </div>
             </div>
             
-            <div className="h-64 relative flex items-end p-4 border-l-2 border-b-2 border-white/20">
-              {/* Hand-drawn sketchy chart */}
-              <svg viewBox="0 0 300 100" className="w-full h-full overflow-visible">
-                <motion.path
-                  initial={{ pathLength: 0 }}
-                  whileInView={{ pathLength: 1 }}
-                  transition={{ duration: 2, ease: "easeInOut" }}
-                  d="M0,100 C50,90 80,60 120,50 C160,40 200,60 240,20 L300,5"
-                  fill="none"
-                  stroke="#84cc16"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  strokeDasharray="8 4"
-                />
-                {/* Points */}
-                <circle cx="0" cy="100" r="4" fill="white" />
-                <circle cx="120" cy="50" r="4" fill="white" />
-                <circle cx="240" cy="20" r="4" fill="white" />
-                <circle cx="300" cy="5" r="6" fill="#84cc16" />
-                
-                <text x="0" y="120" fill="white" className="text-[10px] font-hand">1990</text>
-                <text x="280" y="120" fill="#84cc16" className="text-[12px] font-hand font-bold">2025</text>
-              </svg>
-            </div>
+              {/* Interactive Sketchy Chart */}
+              {/* Interactive Sketchy Chart */}
+              <div className="h-64 w-full relative">
+                <svg viewBox="0 0 300 140" className="w-full h-full overflow-visible">
+                  {/* Axes */}
+                  <line x1="0" y1="0" x2="0" y2="110" stroke="white" strokeOpacity="0.2" strokeWidth="2" />
+                  <line x1="0" y1="110" x2="300" y2="110" stroke="white" strokeOpacity="0.2" strokeWidth="2" />
+
+                  {/* Dashed Grid Lines (Optional style) */}
+                  <line x1="0" y1="100" x2="300" y2="100" stroke="white" strokeOpacity="0.05" strokeDasharray="4" />
+                  <line x1="0" y1="50" x2="300" y2="50" stroke="white" strokeOpacity="0.05" strokeDasharray="4" />
+
+                  {/* The Path */}
+                  <motion.path
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    transition={{ duration: 2, ease: "easeInOut" }}
+                    d="M0,100 Q50,90 85,75 T170,45 T255,15 L300,5"
+                    fill="none"
+                    stroke="#84cc16"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  
+                  {/* Data Points */}
+                  {[
+                    { year: 1990, count: 15, x: 0, y: 100 },
+                    { year: 2000, count: 45, x: 85, y: 75 },
+                    { year: 2010, count: 92, x: 170, y: 45 },
+                    { year: 2020, count: 140, x: 255, y: 15 },
+                    { year: 2025, count: 160, x: 300, y: 5 }
+                  ].map((point, i) => (
+                    <g key={i} className="group cursor-pointer">
+                      {/* Hover Area (invisible larger circle) */}
+                      <circle cx={point.x} cy={point.y} r="15" fill="transparent" />
+                      
+                      {/* Visible Dot */}
+                      <circle 
+                        cx={point.x} 
+                        cy={point.y} 
+                        r={point.year === 2025 ? 6 : 4} 
+                        fill={point.year === 2025 ? "#84cc16" : "white"} 
+                        className="transition-all duration-300 group-hover:r-6 group-hover:fill-lime-400"
+                      />
+
+                      {/* Year Label - Moved below axis */}
+                      <text 
+                        x={point.x} 
+                        y={130} 
+                        fill={point.year === 2025 ? "#84cc16" : "white"} 
+                        textAnchor="middle" 
+                        className={`text-[10px] md:text-[12px] font-hand ${point.year === 2025 ? 'font-bold' : 'opacity-60'}`}
+                      >
+                        {point.year}
+                      </text>
+
+                      {/* Tooltip (CSS-only approach for simplicity & performance) */}
+                      <foreignObject x={point.x - 50} y={point.y - 50} width="100" height="50" className="pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div xmlns="http://www.w3.org/1999/xhtml" className="flex justify-center items-center h-full">
+                          <div className="bg-emerald-950/90 border border-lime-400/50  px-3 py-1 rounded-lg  -mt-2">
+                            <span className="text-lime-400 font-bold text-xs whitespace-nowrap">{point.count} osób</span>
+                          </div>
+                        </div>
+                      </foreignObject>
+                    </g>
+                  ))}
+                </svg>
+              </div>
           </div>
         </GlassCard>
       </section>
@@ -258,15 +303,15 @@ const CareerPage = () => {
                 whileHover={{ scale: 1.02, rotate: 0 }}
                 initial={{ rotate: i % 2 === 0 ? 1 : -1 }}
               >
-                <GlassCard className="h-full flex flex-col justify-end relative overflow-hidden group hover:border-lime-400/60">
+                <GlassCard className="h-full flex flex-col justify-start relative overflow-hidden group hover:border-lime-400/60 pt-12">
                    {/* Large Outline Number Background */}
-                   <span className="absolute -right-4 -top-8 text-[10rem] font-black font-hand text-lime-400/5 group-hover:text-lime-400/10 transition-colors select-none pointer-events-none leading-none">
+                   <span className="absolute right-[-20px] top-[-40px] text-[14rem] font-black font-hand text-lime-400/5 group-hover:text-lime-400/10 transition-colors select-none pointer-events-none leading-none z-0">
                       0{i + 1}
                    </span>
 
-                   <div className="relative z-10">
-                     <h3 className="text-3xl font-black mb-4 text-white group-hover:text-lime-400 transition-colors">{item.title}</h3>
-                     <div className="h-1 w-12 bg-lime-400 mb-4 rounded-full" />
+                   <div className="relative z-10 w-full">
+                     <h3 className="text-4xl font-black mb-4 text-white group-hover:text-lime-400 transition-colors">{item.title}</h3>
+                     <div className="h-1.5 w-16 bg-lime-400 mb-6 rounded-full" />
                      <p className="text-emerald-200/90 text-lg leading-relaxed">{item.desc}</p>
                    </div>
                 </GlassCard>
@@ -291,7 +336,7 @@ const CareerPage = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
-              <GlassCard className={`group transition-all duration-300 ${activeOffer === i ? 'border-lime-400 shadow-[0_0_15px_rgba(132,204,22,0.1)]' : 'hover:border-lime-400/50'}`}>
+              <GlassCard className={`group transition-all duration-300 ${activeOffer === i ? 'border-lime-400 shadow-[0_0_15px_rgba(132,204,22,0.1)]' : 'hover:border-lime-400/50'}`} noHover>
                 <div 
                   className="flex flex-col md:flex-row md:items-center justify-between cursor-pointer"
                   onClick={() => toggleOffer(i)}
@@ -356,7 +401,7 @@ const CareerPage = () => {
                            </div>
                            
                            <div className="pt-4">
-                              <SketchyButton primary onClick={scrollToContact} className="w-full md:w-auto text-center flex justify-center items-center gap-2 group-hover:gap-4 transition-all">
+                              <SketchyButton primary onClick={scrollToContact} className="w-full md:w-auto text-center flex justify-center items-center gap-2 transition-all" noAnimate>
                                 Aplikuj teraz <ArrowRight size={20} />
                               </SketchyButton>
                            </div>
@@ -437,27 +482,43 @@ const CareerPage = () => {
       {/* PROCESS SECTION */}
       <section>
         <SectionHeader title="Proces rekrutacji" />
-        <div className="relative max-w-2xl mx-auto pl-8 border-l-4 border-dashed border-emerald-700">
-          {[
-            { step: "01", title: "Aplikacja", desc: "Wyślij do nas swoje CV przez formularz." },
-            { step: "02", title: "Selekcja", desc: "Krótka rozmowa telefoniczna z HR." },
-            { step: "03", title: "Rozmowa", desc: "Spotkanie techniczne online lub w biurze." },
-            { step: "04", title: "Decyzja", desc: "Witamy na pokładzie! (Oferta)." },
-          ].map((item, i) => (
-            <motion.div 
-              key={i}
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.2 }}
-              className="mb-12 relative"
-            >
-              <div className="absolute -left-[42px] top-0 w-8 h-8 rounded-full bg-emerald-900 border-2 border-lime-400 flex items-center justify-center font-bold text-xs text-lime-400">
-                {item.step}
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-2 tracking-wide">{item.title}</h3>
-              <p className="text-emerald-200/70 leading-relaxed">{item.desc}</p>
-            </motion.div>
-          ))}
+        <div className="relative max-w-4xl mx-auto px-4 md:px-0">
+          {/* Central Line */}
+          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 border-l-2 border-dashed border-emerald-700 md:-translate-x-1/2" />
+          
+          <div className="space-y-12">
+            {[
+              { step: "01", title: "Aplikacja", desc: "Wyślij do nas swoje CV przez formularz." },
+              { step: "02", title: "Selekcja", desc: "Krótka rozmowa telefoniczna z HR." },
+              { step: "03", title: "Rozmowa", desc: "Spotkanie techniczne online lub w biurze." },
+              { step: "04", title: "Decyzja", desc: "Witamy na pokładzie! (Oferta)." },
+            ].map((item, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.2 }}
+                className="relative flex flex-col md:flex-row items-center w-full min-h-[100px]"
+              >
+                {/* Marker */}
+                <div className="absolute left-8 md:left-1/2 top-0 md:top-1/2 md:-translate-y-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-emerald-900 border-2 border-lime-400 flex items-center justify-center font-bold font-hand text-lg text-lime-400 z-10 shadow-[0_0_15px_rgba(132,204,22,0.3)]">
+                  {item.step}
+                </div>
+
+                {/* Content */}
+                <div 
+                  className={`w-full md:w-1/2 pl-24 md:pl-0 pt-1 md:pt-0 ${
+                    i % 2 === 0 
+                      ? 'md:text-right md:pr-16' 
+                      : 'md:ml-auto md:text-left md:pl-16'
+                  }`}
+                >
+                  <h3 className="text-3xl font-bold text-white mb-2 tracking-wide group-hover:text-lime-400 transition-colors">{item.title}</h3>
+                  <p className="text-emerald-200/70 leading-relaxed text-lg">{item.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
