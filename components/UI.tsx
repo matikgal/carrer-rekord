@@ -69,7 +69,7 @@ export interface StickyNoteProps {
 export const StickyNote: React.FC<StickyNoteProps> = ({ children, title }) => {
   return (
     <motion.div
-      whileHover={{ scale: 1.02, rotate: 1 }}
+
       className="bg-[#fef08a] text-emerald-950 p-6 shadow-[8px_8px_15px_rgba(0,0,0,0.4)] rotate-1 max-w-md mx-auto relative"
       style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 90%, 90% 100%, 0% 100%)' }}
     >
@@ -106,6 +106,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({ title, subtitle })
     <motion.h2 
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
       className="text-4xl md:text-5xl font-black text-white mb-2 relative inline-block"
     >
       {title}

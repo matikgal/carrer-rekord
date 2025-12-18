@@ -49,9 +49,9 @@ const Navbar = () => {
   const location = useLocation();
 
   const links = [
-    { path: '/', label: 'Rekrutacja IT' },
-    { path: '/internship', label: 'Programy Stażowe' },
-    { path: '/practices', label: 'Praktyki Studenckie' },
+    { path: '/', label: 'Oferty pracy' },
+    { path: '/internship', label: 'Staże' },
+    { path: '/practices', label: 'Praktyki' },
   ];
 
   const [isScrolled, setIsScrolled] = React.useState(false);
@@ -72,45 +72,72 @@ const Navbar = () => {
           : 'p-4 md:p-6 pointer-events-none border-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Logo */}
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Left: Logo */}
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="pointer-events-auto"
+          className="flex-shrink-0 pointer-events-auto w-32"
         >
-          <div className="bg-white/95 p-1.5 rounded-xl shadow-[4px_4px_0px_0px_#84cc16] border-2 border-lime-400 cursor-pointer">
-            <img src="/si.png" alt="RekordIT Logo" className="h-6 w-auto object-contain" />
+          <div className="cursor-pointer">
+            <img src="/si.png" alt="RekordIT Logo" className="h-8 w-auto object-contain brightness-0 invert" />
           </div>
         </motion.div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex gap-6 pointer-events-auto">
-          {links.map((link) => (
-            <NavLink key={link.path} to={link.path}>
-              {({ isActive }) => (
-                <div
-                  className={`px-4 py-2 font-bold text-sm tracking-wide uppercase rounded-lg border-2 transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-lime-400 text-emerald-950 border-emerald-950 shadow-[4px_4px_0px_0px_#022c22]' 
-                      : 'bg-emerald-900/40 text-emerald-100 border-emerald-400/30 backdrop-blur hover:bg-emerald-800/60'
-                  }`}
-                >
-                  {link.label}
-                </div>
-              )}
-            </NavLink>
-          ))}
+        {/* Center: Desktop Nav */}
+        <div className="hidden md:flex flex-1 justify-center pointer-events-auto">
+          <div className="flex items-center bg-black/20 backdrop-blur-md border border-white/10 rounded-full p-1.5 gap-1">
+            {links.map((link) => (
+              <NavLink key={link.path} to={link.path} className="relative px-6 py-2 rounded-full transition-colors">
+                {({ isActive }) => (
+                  <>
+                    {isActive && (
+                      <motion.div
+                        layoutId="navbar-pill"
+                        className="absolute inset-0 bg-lime-400 rounded-full shadow-sm"
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      />
+                    )}
+                    <span
+                      className={`relative z-10 font-sans font-medium text-xs tracking-wider uppercase transition-colors duration-200 ${
+                        isActive 
+                          ? 'text-emerald-950 font-bold' 
+                          : 'text-emerald-100/70 hover:text-white'
+                      }`}
+                    >
+                      {link.label}
+                    </span>
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </div>
         </div>
 
-        {/* Mobile Toggle */}
-        <div className="md:hidden pointer-events-auto">
-          <button 
-            onClick={() => setIsOpen(!isOpen)} 
-            className="p-2 bg-lime-400 text-emerald-900 rounded-lg shadow-[3px_3px_0px_0px_#000]"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+        {/* Right: Social Icons & Mobile Toggle */}
+        <div className="flex items-center justify-end w-32 gap-3 pointer-events-auto">
+          {/* Social Icons (Desktop) */}
+          <div className="hidden md:flex items-center gap-3">
+            <a href="#" className="text-emerald-400/70 hover:text-white transition-colors p-1.5 hover:bg-emerald-800/20 rounded-lg">
+              <Facebook size={18} />
+            </a>
+            <a href="#" className="text-emerald-400/70 hover:text-white transition-colors p-1.5 hover:bg-emerald-800/20 rounded-lg">
+              <Linkedin size={18} />
+            </a>
+            <a href="#" className="text-emerald-400/70 hover:text-white transition-colors p-1.5 hover:bg-emerald-800/20 rounded-lg">
+              <Youtube size={18} />
+            </a>
+          </div>
+
+          {/* Mobile Toggle */}
+          <div className="md:hidden">
+            <button 
+              onClick={() => setIsOpen(!isOpen)} 
+              className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -139,7 +166,7 @@ const Navbar = () => {
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="min-h-screen text-white relative flex flex-col">
+    <div className="min-h-screen text-white relative flex flex-col overflow-x-hidden">
       <NoiseOverlay />
       <GradientBackground />
       <Navbar />
@@ -150,53 +177,52 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       {/* Footer */}
       <footer className="relative z-10 bg-emerald-950/40 backdrop-blur-lg border-t-2 border-dashed border-emerald-800/50 pt-16 pb-8 mt-auto">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-12 mb-16">
+          <div className="grid md:grid-cols-12 gap-8 mb-16">
             
             {/* Brand Column */}
-            <div className="md:col-span-1 space-y-6">
-              <div className="bg-white/95 p-3 rounded-xl shadow-[4px_4px_0px_0px_#84cc16] border-2 border-lime-400 inline-block mb-6">
-                <img src="/si.png" alt="RekordIT Logo" className="h-14 w-auto object-contain" />
+            <div className="md:col-span-5 lg:col-span-6 space-y-6">
+              <div className="inline-block mb-4">
+                <img src="/si.png" alt="RekordIT Logo" className="h-10 w-auto object-contain brightness-0 invert" />
               </div>
-              <p className="text-emerald-200/70 text-sm leading-relaxed font-light">
+              <p className="text-emerald-200/70 text-sm leading-relaxed font-light max-w-sm">
                 Tworzymy innowacyjne oprogramowanie i budujemy zespoły ekspertów od ponad 35 lat. Dołącz do nas i zmieniaj świat IT.
               </p>
             </div>
 
-            {/* Links Columns */}
-            <div>
-              <h4 className="font-hand text-lime-400 text-xl font-bold mb-6 relative inline-block">
-                Firma
-                <svg className="absolute -bottom-1 left-0 w-full h-2 text-emerald-600" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10, 100 5" stroke="currentColor" strokeWidth="2" fill="none" /></svg>
-              </h4>
-              <ul className="space-y-3 text-emerald-100/80 text-sm">
-                <li><a href="#" className="hover:text-lime-400 transition-colors flex items-center gap-2 group"><span className="w-1 h-1 bg-lime-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"/> O nas</a></li>
-                <li><a href="#" className="hover:text-lime-400 transition-colors flex items-center gap-2 group"><span className="w-1 h-1 bg-lime-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"/> Historia</a></li>
-                <li><a href="#" className="hover:text-lime-400 transition-colors flex items-center gap-2 group"><span className="w-1 h-1 bg-lime-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"/> Blog Techniczny</a></li>
-              </ul>
-            </div>
+            {/* Links Columns Wrapper */}
+            <div className="md:col-span-7 lg:col-span-6 grid grid-cols-2 md:grid-cols-3 gap-8">
+                <div>
+                  <h4 className="font-sans font-bold text-white uppercase text-sm tracking-wider mb-6">
+                    Firma
+                  </h4>
+                  <ul className="space-y-3 text-emerald-100/80 text-sm">
+                    <li><a href="#" className="hover:text-lime-400 transition-colors">O nas</a></li>
+                    <li><a href="#" className="hover:text-lime-400 transition-colors">Historia</a></li>
+                    <li><a href="#" className="hover:text-lime-400 transition-colors">Blog</a></li>
+                  </ul>
+                </div>
 
-            <div>
-              <h4 className="font-hand text-lime-400 text-xl font-bold mb-6 relative inline-block">
-                Wsparcie
-                 <svg className="absolute -bottom-1 left-0 w-full h-2 text-emerald-600" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10, 100 5" stroke="currentColor" strokeWidth="2" fill="none" /></svg>
-              </h4>
-              <ul className="space-y-3 text-emerald-100/80 text-sm">
-                <li><a href="#" className="hover:text-lime-400 transition-colors flex items-center gap-2 group"><span className="w-1 h-1 bg-lime-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"/> Kontakt</a></li>
-                <li><a href="#" className="hover:text-lime-400 transition-colors flex items-center gap-2 group"><span className="w-1 h-1 bg-lime-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"/> FAQ</a></li>
-                <li><a href="#" className="hover:text-lime-400 transition-colors flex items-center gap-2 group"><span className="w-1 h-1 bg-lime-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"/> Polityka Prywatności</a></li>
-              </ul>
-            </div>
+                <div>
+                  <h4 className="font-sans font-bold text-white uppercase text-sm tracking-wider mb-6">
+                    Wsparcie
+                  </h4>
+                  <ul className="space-y-3 text-emerald-100/80 text-sm">
+                    <li><a href="#" className="hover:text-lime-400 transition-colors">Kontakt</a></li>
+                    <li><a href="#" className="hover:text-lime-400 transition-colors">FAQ</a></li>
+                    <li><a href="#" className="hover:text-lime-400 transition-colors">Prywatność</a></li>
+                  </ul>
+                </div>
 
-            <div>
-              <h4 className="font-hand text-lime-400 text-xl font-bold mb-6 relative inline-block">
-                Dla kandydatów
-                 <svg className="absolute -bottom-1 left-0 w-full h-2 text-emerald-600" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10, 100 5" stroke="currentColor" strokeWidth="2" fill="none" /></svg>
-              </h4>
-              <ul className="space-y-3 text-emerald-100/80 text-sm">
-                <li><a href="#/" className="hover:text-lime-400 transition-colors flex items-center gap-2 group"><span className="w-1 h-1 bg-lime-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"/> Oferty pracy</a></li>
-                <li><a href="#/internship" className="hover:text-lime-400 transition-colors flex items-center gap-2 group"><span className="w-1 h-1 bg-lime-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"/> Programy Stażowe</a></li>
-                <li><a href="#/practices" className="hover:text-lime-400 transition-colors flex items-center gap-2 group"><span className="w-1 h-1 bg-lime-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"/> Praktyki Studenckie</a></li>
-              </ul>
+                <div>
+                  <h4 className="font-sans font-bold text-white uppercase text-sm tracking-wider mb-6">
+                    Dla kandydatów
+                  </h4>
+                  <ul className="space-y-3 text-emerald-100/80 text-sm">
+                    <li><a href="#/" className="hover:text-lime-400 transition-colors">Oferty pracy</a></li>
+                    <li><a href="#/internship" className="hover:text-lime-400 transition-colors">Staże</a></li>
+                    <li><a href="#/practices" className="hover:text-lime-400 transition-colors">Praktyki</a></li>
+                  </ul>
+                </div>
             </div>
           </div>
 
@@ -206,13 +232,13 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               © 2025 RekordIT Systems. Wszelkie prawa zastrzeżone.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-lg bg-emerald-900/50 flex items-center justify-center text-emerald-400 hover:bg-lime-400 hover:text-emerald-950 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] hover:shadow-none hover:translate-y-[2px] hover:translate-x-[2px]">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-emerald-400 hover:bg-white hover:text-emerald-950 transition-all">
                 <Youtube size={20} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-emerald-900/50 flex items-center justify-center text-emerald-400 hover:bg-lime-400 hover:text-emerald-950 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] hover:shadow-none hover:translate-y-[2px] hover:translate-x-[2px]">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-emerald-400 hover:bg-white hover:text-emerald-950 transition-all">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-emerald-900/50 flex items-center justify-center text-emerald-400 hover:bg-lime-400 hover:text-emerald-950 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] hover:shadow-none hover:translate-y-[2px] hover:translate-x-[2px]">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-emerald-400 hover:bg-white hover:text-emerald-950 transition-all">
                 <Linkedin size={20} />
               </a>
             </div>

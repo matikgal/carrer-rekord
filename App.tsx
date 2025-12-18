@@ -5,6 +5,7 @@ import { Layout } from './components/Layout';
 import CareerPage from './pages/CareerPage';
 import InternshipPage from './pages/InternshipPage';
 import StudentPracticesPage from './pages/StudentPracticesPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 // Wrapper to handle page transitions
 const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -25,18 +26,30 @@ const AnimatedRoutes = () => {
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
+      <Routes location={location}>
         <Route path="/" element={<PageTransition><CareerPage /></PageTransition>} />
         <Route path="/internship" element={<PageTransition><InternshipPage /></PageTransition>} />
         <Route path="/practices" element={<PageTransition><StudentPracticesPage /></PageTransition>} />
+        <Route path="*" element={<PageTransition><NotFoundPage /></PageTransition>} />
       </Routes>
     </AnimatePresence>
   );
 };
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 const App = () => {
   return (
     <HashRouter>
+      <ScrollToTop />
       <Layout>
         <AnimatedRoutes />
       </Layout>

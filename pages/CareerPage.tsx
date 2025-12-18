@@ -1,83 +1,242 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ChevronDown, MapPin, Banknote, FileText, Code2, CheckCircle2, Play, HelpCircle, Paperclip, UploadCloud } from 'lucide-react';
+
 import { GlassCard, SketchyButton, SectionHeader, StickyNote, Tag } from '../components/UI';
 
-const FloatingShapes = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none z-[-1]">
-    {/* Floating Square */}
-    <motion.div
-      animate={{
-        y: [0, -60, 0],
-        rotate: [0, 90, 180],
-        x: [0, 30, 0],
-        scale: [1, 1.1, 1]
-      }}
-      transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute top-[15%] left-[10%] w-24 h-24 border-4 border-lime-400/30 rounded-3xl backdrop-blur-sm"
-    />
-    
-    {/* Floating Triangle (CSS Border Hack) */}
-    <motion.div
-      animate={{
-        y: [0, 40, 0],
-        rotate: [0, -45, 0],
-        x: [0, -20, 0]
-      }}
-      transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute top-[25%] right-[15%] w-0 h-0 border-l-[40px] border-l-transparent border-b-[70px] border-b-emerald-500/20 border-r-[40px] border-r-transparent filter drop-shadow-lg"
-    />
+const VideoModal = ({ videoId, onClose }: { videoId: string; onClose: () => void }) => {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = 'unset'; };
+  }, []);
 
-    {/* Floating Circle/Donut */}
-    <motion.div
-      animate={{
-        y: [0, -30, 0],
-        x: [0, -40, 0],
-        scale: [1, 1.2, 1]
-      }}
-      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      className="absolute bottom-[20%] left-[20%] w-32 h-32 border-8 border-dashed border-white/10 rounded-full"
-    />
+  if (typeof document === 'undefined') return null;
 
-    {/* Floating Cross */}
-    <motion.div
-      animate={{ rotate: 360, opacity: [0.3, 0.6, 0.3] }}
-      transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-      className="absolute top-[40%] left-[50%] -translate-x-1/2 text-9xl font-black text-lime-400/10 font-sans pointer-events-none select-none"
+  return createPortal(
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-md"
+      onClick={onClose}
     >
-      +
-    </motion.div>
+      <motion.div 
+         initial={{ scale: 0.9, opacity: 0 }}
+         animate={{ scale: 1, opacity: 1 }}
+         exit={{ scale: 0.9, opacity: 0 }}
+         transition={{ type: "spring", damping: 25, stiffness: 300 }}
+         className="w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl relative border border-emerald-500/20"
+         onClick={(e) => e.stopPropagation()}
+      >
+         <button 
+           onClick={onClose}
+           className="absolute top-4 right-4 z-20 group bg-black/50 hover:bg-lime-400 p-2 rounded-full transition-all duration-300"
+         >
+             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white group-hover:text-emerald-950"><path d="M18 6L6 18M6 6l12 12"/></svg>
+         </button>
+         <iframe 
+           src={`https://www.youtube.com/embed/${videoId}?autoplay=1`} 
+           title="YouTube player" 
+           className="w-full h-full"
+           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+           allowFullScreen
+         />
+      </motion.div>
+    </motion.div>,
+    document.body
+  );
+};
 
-     {/* Small Particles */}
-     {[...Array(5)].map((_, i) => (
-       <motion.div
-         key={i}
-         className="absolute w-3 h-3 bg-lime-400/40 rounded-full"
-         initial={{ 
-           top: `${Math.random() * 100}%`, 
-           left: `${Math.random() * 100}%` 
-         }}
-         animate={{ 
-           y: [0, -100, 0], 
-           opacity: [0, 1, 0] 
-         }}
-         transition={{ 
-           duration: Math.random() * 5 + 5, 
-           repeat: Infinity, 
-           delay: Math.random() * 2 
-         }}
-       />
-     ))}
+const BackgroundGrid = () => (
+  <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+    {/* Subtle Grid */}
+    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)]" />
+    
+    {/* Code/Data Accents on sides */}
+    <div className="absolute top-1/4 left-0 w-64 h-64 bg-lime-400/5 blur-[80px] rounded-full" />
+    <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-emerald-500/5 blur-[100px] rounded-full" />
   </div>
 );
 
+const ResponsiveGraph = () => {
+    // Data points every 5 years
+    const data = [
+      { year: 1990, count: 12 },
+      { year: 1995, count: 28 },
+      { year: 2000, count: 45 },
+      { year: 2005, count: 68 },
+      { year: 2010, count: 92 },
+      { year: 2015, count: 118 },
+      { year: 2020, count: 145 },
+      { year: 2025, count: 160 }
+    ];
+
+    // SVG Dimensions
+    const width = 800;
+    const height = 300;
+    const padding = { top: 20, right: 30, bottom: 40, left: 30 };
+
+    // Scales
+    const minYear = data[0].year;
+    const maxYear = data[data.length - 1].year;
+    const maxCount = 180; 
+
+    // Helper functions for coordinates
+    const getX = (year: number) => padding.left + ((year - minYear) / (maxYear - minYear)) * (width - padding.left - padding.right);
+    const getY = (count: number) => height - padding.bottom - (count / maxCount) * (height - padding.top - padding.bottom);
+
+    // Generate Path
+    const points = data.map(d => ({ x: getX(d.year), y: getY(d.count) }));
+    
+    // Simple monotone curve approximation
+    let d = `M ${points[0].x} ${points[0].y}`;
+    
+    for (let i = 0; i < points.length - 1; i++) {
+        const p0 = points[i];
+        const p1 = points[i + 1];
+        
+        // Control points for cubic bezier (Monotone-like smoothing)
+        const cp1x = p0.x + (p1.x - p0.x) / 2; // Control point 1 X
+        const cp1y = p0.y;                   // Control point 1 Y (flat tangent start)
+        const cp2x = p0.x + (p1.x - p0.x) / 2; // Control point 2 X
+        const cp2y = p1.y;                   // Control point 2 Y (flat tangent end)
+        
+        // Use a simpler curve: Cubic Bezier connecting the two points
+        d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p1.x} ${p1.y}`;
+    }
+
+    return (
+        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible">
+             <defs>
+                <linearGradient id="gradient-area" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#84cc16" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#84cc16" stopOpacity="0" />
+                </linearGradient>
+             </defs>
+
+            {/* Grid & Axis Lines */}
+            <line x1={padding.left} y1={height - padding.bottom} x2={width - padding.right} y2={height - padding.bottom} stroke="white" strokeOpacity="0.1" strokeWidth="2" />
+            
+            {/* Reference dashed lines */}
+            {[50, 100, 150].map(val => (
+                <line key={val} x1={padding.left} y1={getY(val)} x2={width - padding.right} y2={getY(val)} stroke="white" strokeOpacity="0.05" strokeDasharray="4" />
+            ))}
+
+             {/* Area under curve fill */}
+             <path
+                d={`${d} L ${width - padding.right} ${height - padding.bottom} L ${padding.left} ${height - padding.bottom} Z`}
+                fill="url(#gradient-area)"
+             />
+
+             {/* The Line */}
+            <motion.path
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 2, ease: "easeOut" }}
+                d={d}
+                fill="none"
+                stroke="#84cc16"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            
+            {/* Data Points */}
+            {data.map((point, i) => (
+                <g key={i} className="group cursor-pointer">
+                    {/* Hit Target (larger invisible circle) */}
+                    <circle cx={getX(point.year)} cy={getY(point.count)} r="20" fill="transparent" /> 
+                    
+                    {/* Visible Point */}
+                    <circle 
+                        cx={getX(point.year)} 
+                        cy={getY(point.count)} 
+                        r={i === data.length - 1 ? 6 : 4} 
+                        fill={i === data.length - 1 ? "#84cc16" : "white"} 
+                        stroke={i === data.length - 1 ? "rgba(132, 204, 22, 0.4)" : "none"}
+                        strokeWidth="4"
+                        className="transition-all duration-300 group-hover:r-8 group-hover:fill-lime-400 group-hover:stroke-lime-400/30" 
+                    />
+
+                    {/* X-Axis Labels (Years) */}
+                    <text 
+                        x={getX(point.year)} 
+                        y={height - 15} 
+                        textAnchor="middle" 
+                        fill="white" 
+                        className={`text-[10px] sm:text-xs font-mono tracking-wider transition-opacity duration-300 ${point.year === 2025 ? 'font-bold text-lime-400 opacity-100' : 'opacity-40 group-hover:opacity-100'}`}
+                    >
+                        {point.year}
+                    </text>
+                    
+                    {/* Tooltip (visible on hover) */}
+                    <foreignObject 
+                        x={getX(point.year) - 40} 
+                        y={getY(point.count) - 50} 
+                        width="80" 
+                        height="40" 
+                        className="pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:-translate-y-1"
+                    >
+                         <div className="flex justify-center">
+                            <div className="bg-emerald-950 border border-lime-400/50 text-lime-400 text-xs font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap">
+                                {point.count} osób
+                            </div>
+                         </div>
+                    </foreignObject>
+                </g>
+            ))}
+        </svg>
+    );
+};
+
 const CareerPage = () => {
+  /* State */
   const [width, setWidth] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
+  
   const [activeOffer, setActiveOffer] = useState<number | null>(null);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  
+  // User provided URLs
+  const [videoUrls] = useState([
+    "https://www.youtube.com/watch?v=Du-3wCxu87k",
+    "https://www.youtube.com/watch?v=LEWwq80nXdU"
+  ]);
+  const [fetchedVideos, setFetchedVideos] = useState<any[]>([]);
 
+  // Fetch Video Data (Title + ID)
+  useEffect(() => {
+    const loadVideos = async () => {
+      const promises = videoUrls.map(async (url) => {
+         try {
+           const res = await fetch(`https://noembed.com/embed?url=${url}`);
+           const data = await res.json();
+           const videoId = url.split('v=')[1]?.split('&')[0];
+           
+           return {
+             id: videoId,
+             title: data.title || "Wideo RekordIT",
+             author: data.author_name || "RekordSI",
+             url: url
+           };
+         } catch (e) {
+           console.error("Video fetch error", e);
+           return null;
+         }
+      });
+      
+      const results = await Promise.all(promises);
+      setFetchedVideos(results.filter(Boolean));
+    };
+    
+    loadVideos();
+  }, [videoUrls]);
+
+  // Carousel width
   useEffect(() => {
     if (carouselRef.current) {
       setWidth(carouselRef.current.scrollWidth - carouselRef.current.offsetWidth);
@@ -163,126 +322,99 @@ const CareerPage = () => {
   return (
     <div className="space-y-24">
       {/* HERO SECTION */}
-      <section className="min-h-[75vh] flex flex-col justify-center items-center text-center relative perspective-1000">
-        <FloatingShapes />
+      <section className="min-h-[85vh] w-[100vw] ml-[calc(50%-50vw)] flex flex-col justify-center items-center text-center relative overflow-hidden">
+        <BackgroundGrid />
         
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative z-10"
+          className="relative z-10 max-w-5xl px-6 mx-auto"
         >
-          <span className="inline-block mb-8 px-6 py-2 rounded-full border border-lime-400/50 bg-lime-400/10 text-lime-400 font-bold text-sm tracking-widest uppercase animate-pulse shadow-[0_0_15px_rgba(132,204,22,0.3)]">
-            REKRUTUJEMY
-          </span>
-          <h1 className="text-6xl md:text-8xl font-mono font-black mb-12 leading-[1.3] tracking-tight drop-shadow-2xl">
-            Rozwijaj się z <br/>
-            <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-lime-300 via-emerald-300 to-teal-300 filter drop-shadow-md">
-              liderem IT
-              <svg className="absolute -bottom-6 left-0 w-full h-8 text-lime-400 z-[-1] opacity-80" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00026 6.99997C52.0003 2.99999 150.003 -3.00001 198.003 4.99999" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="10 10"/></svg>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lime-400/20 bg-lime-400/5 backdrop-blur-sm mb-10">
+            <span className="w-2 h-2 rounded-full bg-lime-500 animate-pulse"/>
+            <span className="text-lime-400 font-mono text-xs font-medium tracking-wide uppercase">
+              Rekrutacja Otwarta
+            </span>
+          </div>
+
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium mb-8 leading-[1.1] tracking-tight text-white">
+            <span className="font-serif italic text-emerald-200 block mb-2">Rozwijaj się z</span>
+            <span className="font-sans font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-emerald-100 to-emerald-300">
+              Liderem Technologii IT
             </span>
           </h1>
-          <p className="text-xl md:text-3xl text-emerald-100/90 mb-12 max-w-3xl mx-auto font-light leading-relaxed tracking-wide">
-            Dołącz do zespołu ekspertów z <span className="font-hand text-lime-400 font-bold text-4xl mx-2 relative top-1">35-letnim</span> doświadczeniem.
+
+          <p className="text-lg md:text-xl text-emerald-100/60 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
+            Dołącz do zespołu 160+ ekspertów z <span className="text-white font-semibold">35-letnim doświadczeniem</span> w budowaniu systemów klasy Enterprise.
           </p>
-          <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
-            <SketchyButton primary className="text-xl px-10 py-4 shadow-[8px_8px_0px_0px_#064e3b]">Zobacz oferty pracy</SketchyButton>
-            <SketchyButton className="text-xl px-10 py-4" onClick={scrollToContact}>Wyślij CV</SketchyButton>
+
+          <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
+            <button 
+              className="group relative px-8 py-4 bg-lime-400 hover:bg-lime-300 text-emerald-950 text-base font-bold rounded-lg transition-all shadow-[0_0_20px_rgba(132,204,22,0.3)] hover:shadow-[0_0_30px_rgba(132,204,22,0.5)] overflow-hidden"
+            >
+              <div className="absolute inset-0 translate-y-[100%] bg-white/20 blur-lg group-hover:translate-y-[-100%] transition-transform duration-700 ease-in-out" />
+              <span className="relative flex items-center gap-2">
+                Zobacz oferty pracy <ArrowRight size={18} />
+              </span>
+            </button>
+            <button 
+              onClick={scrollToContact}
+              className="px-8 py-4 border border-emerald-500/30 text-emerald-100 hover:border-lime-400 hover:text-lime-400 font-medium rounded-lg transition-all hover:bg-lime-400/5"
+            >
+              Porozmawiajmy o karierze
+            </button>
+          </div>
+
+          {/* Tech Strip */}
+          <div className="mt-20 pt-10 border-t border-white/5 flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+             {[
+               {  label: 'Delphi' },
+               {  label: 'React' },
+               {  label: 'SQL Server' },
+               {  label: '.NET Core' },
+               {  label: 'Azure' }
+             ].map((tech, i) => (
+               <div key={i} className="flex items-center gap-2 group cursor-default">
+            
+                 <span className="text-lg font-mono text-emerald-200/80 font-semibold">{tech.label}</span>
+               </div>
+             ))}
           </div>
         </motion.div>
       </section>
 
       {/* STATS SECTION (The Graph) */}
-      <section className="relative">
-        <GlassCard className="border-lime-400/20 bg-emerald-900/40" noHover>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-3xl font-bold mb-4 tracking-wide">Stabilny rozwój przez ponad <span className="text-lime-400 font-hand text-5xl">35 lat</span></h3>
-              <p className="text-emerald-200 mb-8 leading-loose text-lg">Nie jesteśmy start-upem. Budujemy przyszłość na solidnych fundamentach.</p>
-              <div className="flex flex-wrap gap-8">
-                {[
-                  { label: 'lat doświadczenia', val: '4+' },
-                  { label: 'specjalistów', val: '160' },
-                  { label: 'lokalizacja', val: '1' }
-                ].map((stat, idx) => (
-                  <div key={idx} className="flex flex-col">
-                    <span className="text-4xl font-black font-hand text-lime-300">{stat.val}</span>
-                    <span className="text-sm uppercase tracking-wider text-emerald-400">{stat.label}</span>
-                  </div>
-                ))}
+      <section className="relative w-full max-w-7xl mx-auto px-6">
+        <GlassCard className="border-lime-400/20 bg-emerald-900/40 p-8 md:p-12 min-h-[500px] flex flex-col md:flex-row gap-12 items-center overflow-hidden" noHover>
+            {/* Text Content */}
+            <div className="md:w-1/3 relative z-10">
+              <h3 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white leading-tight">
+                Stabilny rozwój <br/> przez ponad <span className="text-lime-400 font-sans inline-block transform -rotate-2 decoration-wavy underline decoration-lime-500/30 underline-offset-8">35 lat</span>
+              </h3>
+              <p className="text-emerald-200/80 mb-10 leading-relaxed text-lg font-light">
+                Nie jesteśmy start-upem, który zniknie po roku. Budujemy przyszłość na solidnych fundamentach, stale powiększając nasz zespół ekspertów i bazę technologiczną.
+              </p>
+              
+              <div className="grid grid-cols-2 gap-8">
+                <div>
+                  <div className="text-5xl font-bold text-white mb-2">40+</div>
+                  <div className="text-xs font-bold text-lime-400 uppercase tracking-widest">Lat Doświadczenia</div>
+                </div>
+                <div>
+                  <div className="text-5xl font-bold text-white mb-2">160+</div>
+                  <div className="text-xs font-bold text-lime-400 uppercase tracking-widest">Specjalistów IT</div>
+                </div>
               </div>
             </div>
             
-              {/* Interactive Sketchy Chart */}
-              {/* Interactive Sketchy Chart */}
-              <div className="h-64 w-full relative">
-                <svg viewBox="0 0 300 140" className="w-full h-full overflow-visible">
-                  {/* Axes */}
-                  <line x1="0" y1="0" x2="0" y2="110" stroke="white" strokeOpacity="0.2" strokeWidth="2" />
-                  <line x1="0" y1="110" x2="300" y2="110" stroke="white" strokeOpacity="0.2" strokeWidth="2" />
-
-                  {/* Dashed Grid Lines (Optional style) */}
-                  <line x1="0" y1="100" x2="300" y2="100" stroke="white" strokeOpacity="0.05" strokeDasharray="4" />
-                  <line x1="0" y1="50" x2="300" y2="50" stroke="white" strokeOpacity="0.05" strokeDasharray="4" />
-
-                  {/* The Path */}
-                  <motion.path
-                    initial={{ pathLength: 0 }}
-                    whileInView={{ pathLength: 1 }}
-                    transition={{ duration: 2, ease: "easeInOut" }}
-                    d="M0,100 Q50,90 85,75 T170,45 T255,15 L300,5"
-                    fill="none"
-                    stroke="#84cc16"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  
-                  {/* Data Points */}
-                  {[
-                    { year: 1990, count: 15, x: 0, y: 100 },
-                    { year: 2000, count: 45, x: 85, y: 75 },
-                    { year: 2010, count: 92, x: 170, y: 45 },
-                    { year: 2020, count: 140, x: 255, y: 15 },
-                    { year: 2025, count: 160, x: 300, y: 5 }
-                  ].map((point, i) => (
-                    <g key={i} className="group cursor-pointer">
-                      {/* Hover Area (invisible larger circle) */}
-                      <circle cx={point.x} cy={point.y} r="15" fill="transparent" />
-                      
-                      {/* Visible Dot */}
-                      <circle 
-                        cx={point.x} 
-                        cy={point.y} 
-                        r={point.year === 2025 ? 6 : 4} 
-                        fill={point.year === 2025 ? "#84cc16" : "white"} 
-                        className="transition-all duration-300 group-hover:r-6 group-hover:fill-lime-400"
-                      />
-
-                      {/* Year Label - Moved below axis */}
-                      <text 
-                        x={point.x} 
-                        y={130} 
-                        fill={point.year === 2025 ? "#84cc16" : "white"} 
-                        textAnchor="middle" 
-                        className={`text-[10px] md:text-[12px] font-hand ${point.year === 2025 ? 'font-bold' : 'opacity-60'}`}
-                      >
-                        {point.year}
-                      </text>
-
-                      {/* Tooltip (CSS-only approach for simplicity & performance) */}
-                      <foreignObject x={point.x - 50} y={point.y - 50} width="100" height="50" className="pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div xmlns="http://www.w3.org/1999/xhtml" className="flex justify-center items-center h-full">
-                          <div className="bg-emerald-950/90 border border-lime-400/50  px-3 py-1 rounded-lg  -mt-2">
-                            <span className="text-lime-400 font-bold text-xs whitespace-nowrap">{point.count} osób</span>
-                          </div>
-                        </div>
-                      </foreignObject>
-                    </g>
-                  ))}
-                </svg>
-              </div>
-          </div>
+            {/* Expanded Chart */}
+            <div className="md:w-2/3 w-full h-[400px] relative mt-12 md:mt-0 flex items-end">
+               {/* Chart Container */}
+               <div className="absolute inset-0 w-full h-full">
+                  <ResponsiveGraph />
+               </div>
+            </div>
         </GlassCard>
       </section>
 
@@ -401,9 +533,12 @@ const CareerPage = () => {
                            </div>
                            
                            <div className="pt-4">
-                              <SketchyButton primary onClick={scrollToContact} className="w-full md:w-auto text-center flex justify-center items-center gap-2 transition-all" noAnimate>
-                                Aplikuj teraz <ArrowRight size={20} />
-                              </SketchyButton>
+                              <button 
+  onClick={scrollToContact}
+  className="w-full md:w-auto px-8 py-3 bg-lime-400 hover:bg-lime-300 text-emerald-950 font-bold rounded-lg transition-all duration-300 shadow-[0_0_15px_rgba(132,204,22,0.3)]   flex justify-center items-center gap-2"
+>
+  Aplikuj teraz <ArrowRight size={20} />
+</button>
                            </div>
                         </div>
 
@@ -464,6 +599,7 @@ const CareerPage = () => {
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
           className="relative max-w-4xl mx-auto text-center"
         >
           <div className="absolute inset-0 bg-lime-400/10 blur-xl rounded-full" />
@@ -472,9 +608,12 @@ const CareerPage = () => {
             <p className="text-emerald-200 text-lg mb-8 max-w-2xl mx-auto">
               Ciągle się rozwijamy i chętnie poznajemy talenty. Napisz do nas, wyślij CV, a my odezwiemy się, gdy tylko pojawi się coś dla Ciebie!
             </p>
-            <SketchyButton onClick={scrollToContact} className="text-lime-400 hover:bg-lime-400 hover:text-emerald-950 border-lime-400 shadow-[4px_4px_0px_0px_#84cc16]">
+            <button 
+              onClick={scrollToContact}
+              className="px-8 py-4 bg-emerald-800 text-lime-400 font-bold rounded-xl border border-lime-400/30 hover:bg-lime-400 hover:text-emerald-950 hover:border-lime-400 transition-all duration-300 shadow-[0_0_20px_rgba(132,204,22,0.2)] hover:shadow-[0_0_30px_rgba(132,204,22,0.6)] hover:-translate-y-1 text-lg"
+            >
               Skontaktuj się z nami
-            </SketchyButton>
+            </button>
           </div>
         </motion.div>
       </section>
@@ -497,6 +636,7 @@ const CareerPage = () => {
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: i * 0.2 }}
                 className="relative flex flex-col md:flex-row items-center w-full min-h-[100px]"
               >
@@ -525,33 +665,50 @@ const CareerPage = () => {
       {/* VIDEO SECTION ("See us in action") */}
       <section>
         <SectionHeader title="Zobacz nas w akcji" subtitle="Trochę kodu, trochę pizzy i dużo pasji." />
+        
+        {/* Helper to show loading state or error if needed, but we fail silently to static data */}
         <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {[
-            { title: "Hackathon 2023", duration: "02:30", color: "bg-purple-900" },
-            { title: "Dzień z życia Dev Teamu", duration: "04:15", color: "bg-blue-900" }
-          ].map((vid, i) => (
+          {fetchedVideos.map((vid, i) => (
              <motion.div
                key={i}
                whileHover={{ scale: 1.02, rotate: i % 2 === 0 ? 1 : -1 }}
                className="relative group cursor-pointer"
+               onClick={() => setSelectedVideo(vid.id)}
              >
                 <GlassCard className="!p-0 overflow-hidden relative aspect-video border-2 border-dashed border-emerald-600 group-hover:border-lime-400">
-                  {/* Fake Video Thumbnail */}
-                  <div className={`absolute inset-0 ${vid.color} opacity-40 mix-blend-overlay`} />
-                  <div className="absolute inset-0 flex items-center justify-center">
+                  {/* Real Youtube Thumbnail */}
+                  <div className="absolute inset-0 bg-emerald-900/20" />
+                  <img 
+                    src={`https://img.youtube.com/vi/${vid.id}/maxresdefault.jpg`} 
+                    alt={vid.title}
+                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
+                    onError={(e) => {
+                        // Fallback if maxres doesn't exist
+                        (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${vid.id}/mqdefault.jpg`;
+                    }}
+                  />
+                  
+                  {/* Play Button Overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center z-10">
                     <div className="w-16 h-16 rounded-full bg-lime-400 flex items-center justify-center text-emerald-950 shadow-[0_0_20px_rgba(132,204,22,0.6)] group-hover:scale-110 transition-transform">
                       <Play fill="currentColor" size={28} className="ml-1" />
                     </div>
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h4 className="text-white font-bold text-xl drop-shadow-md">{vid.title}</h4>
-                    <span className="text-xs font-mono bg-black/50 px-2 py-1 rounded text-white">{vid.duration}</span>
+
+                  {/* Text Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-emerald-950/90 to-transparent pt-12">
+                    <h4 className="text-white font-bold text-xl drop-shadow-md leading-tight line-clamp-2">{vid.title}</h4>
+                    <span className="text-xs font-mono bg-black/50 px-2 py-1 rounded text-white mt-2 inline-block">
+                        {vid.date ? new Date(vid.date).toLocaleDateString() : 'Wideo'}
+                    </span>
                   </div>
                 </GlassCard>
              </motion.div>
           ))}
         </div>
       </section>
+
+
 
       {/* FAQ SECTION */}
       <section className="max-w-4xl mx-auto">
@@ -562,9 +719,10 @@ const CareerPage = () => {
                key={i}
                initial={{ opacity: 0, y: 10 }}
                whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
                transition={{ delay: i * 0.1 }}
              >
-               <GlassCard className={`!p-0 overflow-hidden transition-all duration-300 ${activeFaq === i ? 'border-lime-400 bg-emerald-900/60' : 'hover:bg-emerald-800/30'}`}>
+               <GlassCard noHover className={`!p-0 overflow-hidden transition-all duration-300 ${activeFaq === i ? 'border-lime-400 bg-emerald-900/60' : 'hover:bg-emerald-800/30'}`}>
                   <button 
                     onClick={() => toggleFaq(i)}
                     className="w-full text-left p-6 flex items-center justify-between"
@@ -632,6 +790,14 @@ const CareerPage = () => {
           </form>
         </StickyNote>
       </section>
+      <AnimatePresence>
+        {selectedVideo && (
+          <VideoModal 
+            videoId={selectedVideo} 
+            onClose={() => setSelectedVideo(null)} 
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
