@@ -1,13 +1,15 @@
 import React from 'react';
-import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Layout } from './components/Layout';
+import { AuthProvider, useAuth } from './context/AuthProvider';
 import CareerPage from './pages/CareerPage';
 import InternshipPage from './pages/InternshipPage';
 import StudentPracticesPage from './pages/StudentPracticesPage';
 import NotFoundPage from './pages/NotFoundPage';
+import LoginPage from './pages/LoginPage';
+import AdminPage from './pages/AdminPage';
 
-// Wrapper to handle page transitions
 const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <motion.div
@@ -21,6 +23,12 @@ const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) =
   );
 };
 
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const { session } = useAuth();
+  if (!session) return <Navigate to="/login" replace />;
+  return children;
+};
+
 const AnimatedRoutes = () => {
   const location = useLocation();
 
@@ -30,6 +38,12 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<PageTransition><CareerPage /></PageTransition>} />
         <Route path="/internship" element={<PageTransition><InternshipPage /></PageTransition>} />
         <Route path="/practices" element={<PageTransition><StudentPracticesPage /></PageTransition>} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <PageTransition><AdminPage /></PageTransition>
+          </ProtectedRoute>
+        } />
         <Route path="*" element={<PageTransition><NotFoundPage /></PageTransition>} />
       </Routes>
     </AnimatePresence>
@@ -48,12 +62,14 @@ const ScrollToTop = () => {
 
 const App = () => {
   return (
-    <HashRouter>
-      <ScrollToTop />
-      <Layout>
-        <AnimatedRoutes />
-      </Layout>
-    </HashRouter>
+    <AuthProvider>
+      <HashRouter>
+        <ScrollToTop />
+        <Layout>
+          <AnimatedRoutes />
+        </Layout>
+      </HashRouter>
+    </AuthProvider>
   );
 };
 

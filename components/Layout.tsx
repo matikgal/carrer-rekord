@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Menu, X, Sparkles, Youtube, Facebook, Linkedin } from 'lucide-react';
 
-// Noise texture SVG
 const NoiseOverlay = () => (
   <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.07] mix-blend-overlay">
     <svg width="100%" height="100%">
@@ -15,31 +14,30 @@ const NoiseOverlay = () => (
   </div>
 );
 
-// Animated Gradient Background
 const GradientBackground = () => (
   <div className="fixed inset-0 z-[-1] overflow-hidden bg-emerald-950">
-    <motion.div 
-      animate={{ 
+    <motion.div
+      animate={{
         scale: [1, 1.2, 1],
         rotate: [0, 10, -10, 0],
       }}
       transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] bg-teal-800/40 blur-[100px] rounded-full mix-blend-screen" 
+      className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] bg-teal-800/40 blur-[100px] rounded-full mix-blend-screen"
     />
-    <motion.div 
-      animate={{ 
+    <motion.div
+      animate={{
         scale: [1.2, 1, 1.2],
         x: [0, 100, 0],
       }}
       transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute top-[40%] -right-[20%] w-[60vw] h-[60vw] bg-emerald-700/30 blur-[120px] rounded-full mix-blend-screen" 
+      className="absolute top-[40%] -right-[20%] w-[60vw] h-[60vw] bg-emerald-700/30 blur-[120px] rounded-full mix-blend-screen"
     />
-    <motion.div 
-      animate={{ 
+    <motion.div
+      animate={{
         y: [0, -100, 0],
       }}
       transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute bottom-[-10%] left-[20%] w-[50vw] h-[50vw] bg-lime-900/40 blur-[90px] rounded-full mix-blend-screen" 
+      className="absolute bottom-[-10%] left-[20%] w-[50vw] h-[50vw] bg-lime-900/40 blur-[90px] rounded-full mix-blend-screen"
     />
   </div>
 );
@@ -65,16 +63,15 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
-        isScrolled 
-          ? 'bg-emerald-950/80 backdrop-blur-md shadow-lg py-3 border-emerald-800/50' 
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${isScrolled
+          ? 'bg-emerald-950/80 backdrop-blur-md shadow-lg py-3 border-emerald-800/50'
           : 'p-4 md:p-6 pointer-events-none border-transparent'
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left: Logo */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="flex-shrink-0 pointer-events-auto w-32"
@@ -99,11 +96,10 @@ const Navbar = () => {
                       />
                     )}
                     <span
-                      className={`relative z-10 font-sans font-medium text-xs tracking-wider uppercase transition-colors duration-200 ${
-                        isActive 
-                          ? 'text-emerald-950 font-bold' 
+                      className={`relative z-10 font-sans font-medium text-xs tracking-wider uppercase transition-colors duration-200 ${isActive
+                          ? 'text-emerald-950 font-bold'
                           : 'text-emerald-100/70 hover:text-white'
-                      }`}
+                        }`}
                     >
                       {link.label}
                     </span>
@@ -131,8 +127,8 @@ const Navbar = () => {
 
           {/* Mobile Toggle */}
           <div className="md:hidden">
-            <button 
-              onClick={() => setIsOpen(!isOpen)} 
+            <button
+              onClick={() => setIsOpen(!isOpen)}
               className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -143,15 +139,15 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="absolute top-20 left-4 right-4 bg-emerald-900/95 backdrop-blur-xl border-2 border-dashed border-lime-400 rounded-2xl p-6 pointer-events-auto flex flex-col gap-4 shadow-[8px_8px_0px_0px_#000]"
         >
           {links.map((link) => (
-            <NavLink 
-              key={link.path} 
-              to={link.path} 
+            <NavLink
+              key={link.path}
+              to={link.path}
               onClick={() => setIsOpen(false)}
               className={({ isActive }) => `text-lg font-bold p-2 transition-colors ${isActive ? 'text-lime-400' : 'text-white hover:text-lime-400'}`}
             >
@@ -173,12 +169,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       <main className="pt-28 pb-20 px-4 max-w-7xl mx-auto relative z-10 w-full flex-grow">
         {children}
       </main>
-      
+
       {/* Footer */}
       <footer className="relative z-10 bg-emerald-950/40 backdrop-blur-lg border-t-2 border-dashed border-emerald-800/50 pt-16 pb-8 mt-auto">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-12 gap-8 mb-16">
-            
+
             {/* Brand Column */}
             <div className="md:col-span-5 lg:col-span-6 space-y-6">
               <div className="inline-block mb-4">
@@ -191,38 +187,38 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
             {/* Links Columns Wrapper */}
             <div className="md:col-span-7 lg:col-span-6 grid grid-cols-2 md:grid-cols-3 gap-8">
-                <div>
-                  <h4 className="font-sans font-bold text-white uppercase text-sm tracking-wider mb-6">
-                    Firma
-                  </h4>
-                  <ul className="space-y-3 text-emerald-100/80 text-sm">
-                    <li><a href="#" className="hover:text-lime-400 transition-colors">O nas</a></li>
-                    <li><a href="#" className="hover:text-lime-400 transition-colors">Historia</a></li>
-                    <li><a href="#" className="hover:text-lime-400 transition-colors">Blog</a></li>
-                  </ul>
-                </div>
+              <div>
+                <h4 className="font-sans font-bold text-white uppercase text-sm tracking-wider mb-6">
+                  Firma
+                </h4>
+                <ul className="space-y-3 text-emerald-100/80 text-sm">
+                  <li><a href="#" className="hover:text-lime-400 transition-colors">O nas</a></li>
+                  <li><a href="#" className="hover:text-lime-400 transition-colors">Historia</a></li>
+                  <li><a href="#" className="hover:text-lime-400 transition-colors">Blog</a></li>
+                </ul>
+              </div>
 
-                <div>
-                  <h4 className="font-sans font-bold text-white uppercase text-sm tracking-wider mb-6">
-                    Wsparcie
-                  </h4>
-                  <ul className="space-y-3 text-emerald-100/80 text-sm">
-                    <li><a href="#" className="hover:text-lime-400 transition-colors">Kontakt</a></li>
-                    <li><a href="#" className="hover:text-lime-400 transition-colors">FAQ</a></li>
-                    <li><a href="#" className="hover:text-lime-400 transition-colors">Prywatność</a></li>
-                  </ul>
-                </div>
+              <div>
+                <h4 className="font-sans font-bold text-white uppercase text-sm tracking-wider mb-6">
+                  Wsparcie
+                </h4>
+                <ul className="space-y-3 text-emerald-100/80 text-sm">
+                  <li><a href="#" className="hover:text-lime-400 transition-colors">Kontakt</a></li>
+                  <li><a href="#" className="hover:text-lime-400 transition-colors">FAQ</a></li>
+                  <li><a href="#" className="hover:text-lime-400 transition-colors">Prywatność</a></li>
+                </ul>
+              </div>
 
-                <div>
-                  <h4 className="font-sans font-bold text-white uppercase text-sm tracking-wider mb-6">
-                    Dla kandydatów
-                  </h4>
-                  <ul className="space-y-3 text-emerald-100/80 text-sm">
-                    <li><a href="#/" className="hover:text-lime-400 transition-colors">Oferty pracy</a></li>
-                    <li><a href="#/internship" className="hover:text-lime-400 transition-colors">Staże</a></li>
-                    <li><a href="#/practices" className="hover:text-lime-400 transition-colors">Praktyki</a></li>
-                  </ul>
-                </div>
+              <div>
+                <h4 className="font-sans font-bold text-white uppercase text-sm tracking-wider mb-6">
+                  Dla kandydatów
+                </h4>
+                <ul className="space-y-3 text-emerald-100/80 text-sm">
+                  <li><a href="#/" className="hover:text-lime-400 transition-colors">Oferty pracy</a></li>
+                  <li><a href="#/internship" className="hover:text-lime-400 transition-colors">Staże</a></li>
+                  <li><a href="#/practices" className="hover:text-lime-400 transition-colors">Praktyki</a></li>
+                </ul>
+              </div>
             </div>
           </div>
 
