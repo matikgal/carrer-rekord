@@ -118,7 +118,7 @@ export const AdminSection = <T extends { id: string } & Record<string, any>>({ t
                 data={filteredData}
                 columns={columns}
                 onAdd={() => setEditingItem({})}
-                onEdit={setEditingItem}
+                onEdit={(item) => setEditingItem(item)}
                 onDelete={handleDeleteClick}
             />
 

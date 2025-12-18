@@ -23,7 +23,7 @@ const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) =
   );
 };
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
   const { session } = useAuth();
   if (!session) return <Navigate to="/login" replace />;
   return children;

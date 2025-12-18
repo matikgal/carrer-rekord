@@ -241,10 +241,10 @@ export const TeamEditor = () => {
 
             <ConfirmationModal
                 isOpen={!!deleteId}
-                onClose={() => setDeleteId(null)}
+                onCancel={() => setDeleteId(null)}
                 onConfirm={handleRemoveMember}
                 title="Usunąć użytkownika?"
-                description="To trwale usunie konto użytkownika z całego systemu (Logowanie + Uprawnienia). Tej operacji nie można cofnąć."
+                message="To trwale usunie konto użytkownika z całego systemu (Logowanie + Uprawnienia). Tej operacji nie można cofnąć."
             />
         </div>
     );

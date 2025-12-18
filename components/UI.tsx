@@ -7,20 +7,25 @@ export interface SketchyButtonProps {
   className?: string;
   onClick?: () => void;
   noAnimate?: boolean;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
-export const SketchyButton: React.FC<SketchyButtonProps> = ({ children, primary = false, className = '', onClick, noAnimate = false }) => {
+export const SketchyButton: React.FC<SketchyButtonProps> = ({ children, primary = false, className = '', onClick, noAnimate = false, disabled = false, type = "button" }) => {
   return (
     <motion.button
-      whileHover={noAnimate ? undefined : { scale: 1.05, rotate: -2, y: -5 }}
-      whileTap={noAnimate ? undefined : { scale: 0.95 }}
+      type={type}
+      disabled={disabled}
+      whileHover={(noAnimate || disabled) ? undefined : { scale: 1.05, rotate: -2, y: -5 }}
+      whileTap={(noAnimate || disabled) ? undefined : { scale: 0.95 }}
       onClick={onClick}
       className={`
         relative px-8 py-3 font-black text-lg font-hand tracking-wide
         border-2 rounded-tl-2xl rounded-br-3xl rounded-tr-sm rounded-bl-sm
         transition-colors duration-300 cursor-pointer
-        ${primary 
-          ? 'bg-lime-400 text-emerald-950 border-emerald-950 shadow-[5px_5px_0px_0px_#064e3b] hover:bg-lime-500  ' 
+        ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+        ${primary
+          ? 'bg-lime-400 text-emerald-950 border-emerald-950 shadow-[5px_5px_0px_0px_#064e3b] hover:bg-lime-500  '
           : 'bg-transparent text-lime-400 border-lime-400 shadow-[5px_5px_0px_0px_rgba(132,204,22,0.3)] hover:bg-lime-400/10'
         }
         ${className}
@@ -75,13 +80,13 @@ export const StickyNote: React.FC<StickyNoteProps> = ({ children, title }) => {
     >
       {/* Tape Effect */}
       <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-white/40 backdrop-blur-sm rotate-2 shadow-sm" />
-      
+
       {title && <h3 className="font-hand font-bold text-2xl mb-4 text-emerald-900 border-b-2 border-emerald-900/20 pb-2">{title}</h3>}
       {children}
-      
+
       {/* Folded corner visual */}
-      <div className="absolute bottom-0 right-0 w-8 h-8 bg-[#fde047] shadow-[-2px_-2px_2px_rgba(0,0,0,0.1)]" 
-           style={{ clipPath: 'polygon(0 0, 0 100%, 100% 0)' }} />
+      <div className="absolute bottom-0 right-0 w-8 h-8 bg-[#fde047] shadow-[-2px_-2px_2px_rgba(0,0,0,0.1)]"
+        style={{ clipPath: 'polygon(0 0, 0 100%, 100% 0)' }} />
     </motion.div>
   );
 };
@@ -103,7 +108,7 @@ export interface SectionHeaderProps {
 
 export const SectionHeader: React.FC<SectionHeaderProps> = ({ title, subtitle }) => (
   <div className="mb-12 text-center">
-    <motion.h2 
+    <motion.h2
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
