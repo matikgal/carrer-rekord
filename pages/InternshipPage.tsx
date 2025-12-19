@@ -128,13 +128,40 @@ const InternshipPage = () => {
           <SectionHeader title="Oś czasu" subtitle="Szybka ścieżka do kariery" />
           <div className="flex flex-col md:flex-row justify-between items-start md:items-start relative gap-8 md:gap-0">
             <div className="hidden md:block absolute top-[23px] left-0 w-full h-1 border-t-2 border-dashed border-lime-400/30 -z-10" />
+            
+            {/* Mobile Vertical Line */}
+            <div className="md:hidden absolute left-1/2 top-0 bottom-0 w-0.5 border-l-2 border-dashed border-lime-400/30 -translate-x-1/2 -z-10" />
 
             {timeline.map((step, i) => (
-              <div key={i} className="flex md:flex-col items-center gap-4 md:gap-2 group">
-                <div className="w-12 h-12 rounded-full bg-emerald-900 border-2 border-lime-400 flex items-center justify-center font-bold text-lime-400 z-10 shadow-[0px_0px_10px_rgba(132,204,22,0.5)] group-hover:scale-110 transition-transform">
+              <div key={i} className="grid grid-cols-[1fr_auto_1fr] md:flex md:flex-col gap-4 md:gap-2 items-center group w-full md:w-auto">
+                
+                {/* Mobile Left Text (Odd index) */}
+                <div className={`md:hidden text-right ${i % 2 !== 0 ? 'opacity-100' : 'opacity-0'}`}>
+                  {i % 2 !== 0 && (
+                    <>
+                      <div className="font-hand font-bold text-2xl text-white group-hover:text-lime-400 transition-colors">{step.date_display}</div>
+                      <div className="text-sm uppercase tracking-wide text-emerald-400">{step.title}</div>
+                    </>
+                  )}
+                </div>
+
+                {/* Circle */}
+                <div className="w-12 h-12 rounded-full bg-emerald-900 border-2 border-lime-400 flex items-center justify-center font-bold text-lime-400 z-10 shadow-[0px_0px_10px_rgba(132,204,22,0.5)] group-hover:scale-110 transition-transform flex-shrink-0">
                   {i + 1}
                 </div>
-                <div className="md:text-center">
+
+                {/* Mobile Right Text (Even index) */}
+                <div className={`md:hidden text-left ${i % 2 === 0 ? 'opacity-100' : 'opacity-0'}`}>
+                  {i % 2 === 0 && (
+                    <>
+                      <div className="font-hand font-bold text-2xl text-white group-hover:text-lime-400 transition-colors">{step.date_display}</div>
+                      <div className="text-sm uppercase tracking-wide text-emerald-400">{step.title}</div>
+                    </>
+                  )}
+                </div>
+
+                {/* Desktop Text */}
+                <div className="hidden md:block md:text-center mt-2">
                   <div className="font-hand font-bold text-2xl text-white group-hover:text-lime-400 transition-colors">{step.date_display}</div>
                   <div className="text-sm uppercase tracking-wide text-emerald-400">{step.title}</div>
                 </div>
@@ -251,9 +278,10 @@ const InternshipPage = () => {
             <p className="text-xl text-emerald-200 mb-8 max-w-lg mx-auto">
               Miejsca szybko znikają. Nie czekaj na ostatnią chwilę – wyślij zgłoszenie już dziś!
             </p>
-            <SketchyButton primary className="text-xl px-12 py-4 shadow-[8px_8px_0_0_#064e3b] hover:translate-y-[-5px]">
-              Aplikuj teraz
-            </SketchyButton>
+            <button className="group relative px-12 py-4 bg-lime-400 hover:bg-lime-300 text-emerald-950 text-xl font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(132,204,22,0.3)] hover:shadow-[0_0_30px_rgba(132,204,22,0.5)] hover:-translate-y-1 overflow-hidden">
+              <div className="absolute inset-0 translate-y-[100%] bg-white/30 blur-lg group-hover:translate-y-[-100%] transition-transform duration-700 ease-in-out" />
+              <span className="relative">Aplikuj teraz</span>
+            </button>
           </GlassCard>
         </motion.div>
       </section>

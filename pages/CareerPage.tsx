@@ -186,7 +186,7 @@ const CareerPage = () => {
             </div>
           </div>
 
-          <div className="md:w-2/3 w-full h-[400px] relative mt-12 md:mt-0 flex items-end">
+          <div className="hidden md:flex md:w-2/3 w-full h-[400px] relative mt-0 items-end">
             <div className="absolute inset-0 w-full h-full">
               {growthData.length > 0 && <ResponsiveGraph data={growthData} />}
             </div>

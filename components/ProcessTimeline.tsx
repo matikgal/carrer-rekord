@@ -14,7 +14,7 @@ interface ProcessTimelineProps {
 export const ProcessTimeline: React.FC<ProcessTimelineProps> = ({ steps }) => {
     return (
         <div className="relative max-w-4xl mx-auto px-4 md:px-0">
-            <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 border-l-2 border-dashed border-emerald-700 md:-translate-x-1/2" />
+            <div className="hidden md:block absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 border-l-2 border-dashed border-emerald-700 -translate-x-1/2" />
 
             <div className="space-y-12">
                 {steps.map((item, i) => (

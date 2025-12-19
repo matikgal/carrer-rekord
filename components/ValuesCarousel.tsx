@@ -14,7 +14,7 @@ interface ValuesCarouselProps {
 
 export const ValuesCarousel: React.FC<ValuesCarouselProps> = ({ values }) => {
     const carouselRef = useRef<HTMLDivElement>(null);
-    const dragConstraint = useCarouselDrag(carouselRef);
+    const dragConstraint = useCarouselDrag(carouselRef, values);
 
     return (
         <>

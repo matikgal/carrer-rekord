@@ -74,25 +74,29 @@ const Navbar = () => {
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex-shrink-0 pointer-events-auto w-32"
+          className="flex-shrink-0 pointer-events-auto"
         >
-          <div className="cursor-pointer">
-            <img src="/si.png" alt="RekordIT Logo" className="h-8 w-auto object-contain brightness-0 invert" />
+          <div className="flex items-center gap-2 cursor-pointer group">
+            
+            <span className="font-sans font-bold text-xl tracking-tight text-white">
+              Rekord<span className="text-lime-400">IT</span>
+            </span>
           </div>
         </motion.div>
 
         {/* Center: Desktop Nav */}
         <div className="hidden md:flex flex-1 justify-center pointer-events-auto">
-          <div className="flex items-center bg-black/20 backdrop-blur-md border border-white/10 rounded-full p-1.5 gap-1">
+          <div className="flex items-center bg-black/20 backdrop-blur-md border border-white/10 rounded-full p-1.5 gap-1 overflow-hidden relative">
             {links.map((link) => (
               <NavLink key={link.path} to={link.path} className="relative px-6 py-2 rounded-full transition-colors">
                 {({ isActive }) => (
                   <>
                     {isActive && (
                       <motion.div
-                        layoutId="navbar-pill"
-                        className="absolute inset-0 bg-lime-400 rounded-full shadow-sm"
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="absolute inset-0 bg-lime-400 rounded-full shadow-[0_0_15px_rgba(132,204,22,0.4)]"
+                        transition={{ duration: 0.2, ease: "easeOut" }}
                       />
                     )}
                     <span
@@ -177,8 +181,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
             {/* Brand Column */}
             <div className="md:col-span-5 lg:col-span-6 space-y-6">
-              <div className="inline-block mb-4">
-                <img src="/si.png" alt="RekordIT Logo" className="h-10 w-auto object-contain brightness-0 invert" />
+              <div className="flex items-center gap-3 mb-6">
+                
+                <span className="font-sans font-bold text-2xl tracking-tight text-white">
+                  Rekord<span className="text-lime-400">IT</span>
+                </span>
               </div>
               <p className="text-emerald-200/70 text-sm leading-relaxed font-light max-w-sm">
                 Tworzymy innowacyjne oprogramowanie i budujemy zespoły ekspertów od ponad 35 lat. Dołącz do nas i zmieniaj świat IT.

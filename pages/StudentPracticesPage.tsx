@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GlassCard, SectionHeader } from '../components/UI';
-import { AlertTriangle, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
+import { AlertTriangle, Quote, ChevronDown, ArrowRight, FolderGit2 } from 'lucide-react';
 import { supabase } from '../supabaseClient';
 import { FloatingShapes } from '../components/FloatingShapes';
 import { ContactForm } from '../components/ContactForm';
@@ -27,7 +27,7 @@ const MEMORIES = [
 
 const StudentPracticesPage = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
-  const dragConstraint = useCarouselDrag(carouselRef);
+  const projectsRef = useRef<HTMLDivElement>(null);
   const faqAccordion = useAccordion();
 
   const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
@@ -38,6 +38,10 @@ const StudentPracticesPage = () => {
   const [activeYear, setActiveYear] = useState<string | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [recruitmentOpen, setRecruitmentOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const dragConstraint = useCarouselDrag(carouselRef, isLoading);
+  const projectsConstraint = useCarouselDrag(projectsRef, activeYear);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -56,6 +60,8 @@ const StudentPracticesPage = () => {
       if (memoriesRes.data) setMemories(memoriesRes.data as any[]);
       if (settingsRes.data?.value) setRecruitmentOpen(settingsRes.data.value.isOpen);
       if (projectsRes.data) setProjects(projectsRes.data as any[]);
+      
+      setIsLoading(false);
     };
     fetchContent();
   }, []);
@@ -91,7 +97,7 @@ const StudentPracticesPage = () => {
       {/* HERO */}
       <section className="relative flex flex-col items-center text-center pt-8 min-h-[50vh] justify-center perspective-1000">
         <FloatingShapes />
-        {!recruitmentOpen && (
+        {!isLoading && !recruitmentOpen && (
           <motion.div
             initial={{ rotate: -5, y: -20, opacity: 0 }}
             animate={{ rotate: 0, y: 0, opacity: 1 }}
@@ -121,26 +127,28 @@ const StudentPracticesPage = () => {
       </section>
 
       {/* TIMELINE */}
-      {timeline.length > 0 && (
+      {!isLoading && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="space-y-24"
+        >
+          {timeline.length > 0 && (
         <section>
           <SectionHeader title="Kalendarz praktyk" />
-          <div className="relative">
-            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-lime-400 to-transparent dashed-line" />
+          <div className="relative flex flex-col items-center gap-8">
             {timeline.map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: item.align === 'left' ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                className={`flex items-center mb-8 ${item.align === 'right' ? 'md:flex-row-reverse' : ''} ${item.align === 'center' ? 'flex-col md:flex-col justify-center' : ''}`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                className="flex flex-col items-center text-center w-full max-w-md mx-auto"
               >
-                <div className={`w-full md:w-1/2 px-4 ${item.align === 'right' ? 'text-left' : item.align === 'center' ? 'text-center' : 'text-right'}`}>
-                  <div className={`inline-block p-4 rounded-xl border-2 ${item.align === 'center' ? 'bg-lime-400 text-black border-black shadow-[4px_4px_0_0_#fff]' : 'bg-emerald-900/50 border-lime-400/30'}`}>
-                    <div className="text-xl font-black font-hand">{item.date_display}</div>
-                    <div className={`text-sm uppercase font-bold ${item.align === 'center' ? 'text-emerald-900' : 'text-emerald-400'}`}>{item.title}</div>
-                  </div>
+                <div className={`w-full inline-block p-6 rounded-2xl border-2 transition-transform hover:scale-105 ${item.align === 'center' || i === timeline.length - 1 ? 'bg-lime-400 text-black border-black shadow-[8px_8px_0_0_#000]' : 'bg-emerald-900/50 border-lime-400/30'}`}>
+                  <div className="text-3xl font-black font-hand mb-1">{item.date_display}</div>
+                  <div className={`text-sm uppercase font-bold tracking-wider ${item.align === 'center' || i === timeline.length - 1 ? 'text-emerald-900' : 'text-emerald-400'}`}>{item.title}</div>
                 </div>
-                <div className="hidden md:block w-4 h-4 rounded-full bg-lime-400 border-4 border-emerald-900 z-10" />
-                <div className="hidden md:block w-1/2" />
               </motion.div>
             ))}
           </div>
@@ -202,7 +210,6 @@ const StudentPracticesPage = () => {
                 className="relative"
               >
                 <div className="bg-white text-emerald-950 p-6 rounded-tl-3xl rounded-br-3xl rounded-tr-sm rounded-bl-sm shadow-[8px_8px_0_0_rgba(6,78,59,0.5)] relative z-10 font-hand text-lg leading-tight border-2 border-emerald-900">
-                  <Quote className="text-lime-400 mb-2 opacity-50 absolute top-2 right-2" size={40} />
                   "{t.quote}"
                 </div>
                 <div className="mt-4 pl-4 flex items-center">
@@ -271,73 +278,56 @@ const StudentPracticesPage = () => {
                   Realizowane Projekty <span className="text-lime-400">{activeYear}</span>
                 </h3>
 
-                <div className="relative max-w-6xl mx-auto px-12">
-                  {/* Navigation Buttons */}
-                  {projects.filter(p => p.year === activeYear).length > 2 && (
-                    <>
-                      <button
-                        onClick={prevSlide}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-emerald-900/50 hover:bg-lime-400/20 rounded-full text-lime-400 transition-colors z-10"
-                      >
-                        <ChevronLeft size={32} />
-                      </button>
-                      <button
-                        onClick={nextSlide}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-emerald-900/50 hover:bg-lime-400/20 rounded-full text-lime-400 transition-colors z-10"
-                      >
-                        <ChevronRight size={32} />
-                      </button>
-                    </>
-                  )}
-
-                  <div className="grid md:grid-cols-2 gap-8 relative overflow-hidden">
-                    <motion.div
-                      className="col-span-2 grid md:grid-cols-2 gap-8 cursor-grab active:cursor-grabbing"
-                      drag="x"
-                      dragConstraints={{ left: 0, right: 0 }}
-                      dragElastic={0.2}
-                      onDragEnd={(e, { offset, velocity }) => {
-                        const swipe = offset.x; // Distance swiped
-
-                        if (swipe < -50) {
-                          // Swiped left -> Next Slide
-                          nextSlide();
-                        } else if (swipe > 50) {
-                          // Swiped right -> Prev Slide
-                          prevSlide();
-                        }
-                      }}
-                    >
-                      {projects
-                        .filter(p => p.year === activeYear)
-                        .slice(currentSlide * 2, currentSlide * 2 + 2)
-                        .map((project, i) => (
-                          <GlassCard key={`${activeYear}-${i}`} className="flex flex-col h-full border-t-4 border-t-lime-400 min-h-[400px]">
-                            <h4 className="text-xl font-bold text-white mb-2">{project.title}</h4>
-                            <p className="text-emerald-200/80 mb-4 text-sm uppercase tracking-wide">{project.goal}</p>
-
-                            <div className="mt-auto space-y-4">
-                              {project.tools && (
-                                <div>
-                                  <span className="text-lime-400 text-xs font-bold uppercase block mb-1">Narzędzia</span>
-                                  <p className="text-emerald-100 text-sm">{project.tools}</p>
+                <motion.div ref={projectsRef} className="cursor-grab active:cursor-grabbing overflow-hidden p-4 -m-4">
+                  <motion.div
+                    drag="x"
+                    dragConstraints={{ right: 0, left: -projectsConstraint }}
+                    className="flex gap-8"
+                  >
+                    {projects
+                      .filter(p => p.year === activeYear)
+                      .map((project, i) => (
+                        <motion.div
+                          key={`${activeYear}-${i}`}
+                          className="min-w-[350px] md:min-w-[400px] h-full"
+                          whileHover={{ scale: 1.02 }}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.1 }}
+                        >
+                          <GlassCard className="h-full flex flex-col justify-between border-t-4 border-t-lime-400 min-h-[400px] relative group hover:border-lime-400/60 transition-colors">
+                            <div>
+                                <h4 className="text-2xl font-black text-white mb-2 group-hover:text-lime-400 transition-colors">{project.title}</h4>
+                                <p className="text-emerald-200/80 mb-6 text-sm uppercase tracking-wide font-bold">{project.goal}</p>
+                                
+                                <div className="space-y-4">
+                                  {project.tools && (
+                                    <div>
+                                      <span className="text-lime-400 text-xs font-bold uppercase block mb-1">Narzędzia</span>
+                                      <p className="text-emerald-100 text-sm font-mono bg-emerald-950/30 p-2 rounded">{project.tools}</p>
+                                    </div>
+                                  )}
+                                  {project.skills && (
+                                    <div>
+                                      <span className="text-lime-400 text-xs font-bold uppercase block mb-1">Zdobyte Umiejętności</span>
+                                      <p className="text-emerald-100 text-sm">{project.skills}</p>
+                                    </div>
+                                  )}
                                 </div>
-                              )}
-                              {project.skills && (
-                                <div>
-                                  <span className="text-lime-400 text-xs font-bold uppercase block mb-1">Zdobyte Umiejętności</span>
-                                  <p className="text-emerald-100 text-sm">{project.skills}</p>
-                                </div>
-                              )}
-                              <div className="pt-4 border-t border-emerald-500/30">
-                                <span className="text-emerald-400 text-xs uppercase block mb-1">Zespół</span>
-                                <p className="text-white font-hand text-lg">{project.team}</p>
-                              </div>
+                            </div>
+
+                            <div className="pt-6 mt-6 border-t border-emerald-500/30">
+                              <span className="text-emerald-400 text-xs uppercase block mb-1">Zespół</span>
+                              <p className="text-white font-hand text-lg">{project.team}</p>
                             </div>
                           </GlassCard>
-                        ))}
-                    </motion.div>
-                  </div>
+                        </motion.div>
+                    ))}
+                  </motion.div>
+                </motion.div>
+                
+                <div className="text-center mt-6 text-emerald-500/50 text-sm font-hand">
+                  ← Przesuń, aby zobaczyć więcej →
                 </div>
 
                 {/* Fallback if no projects for selected year */}
@@ -368,9 +358,11 @@ const StudentPracticesPage = () => {
       }
 
       {/* CONTACT FORM */}
-      <section className="pb-20">
-        <ContactForm title="Chcesz zapytać o praktyki?" />
-      </section>
+          <section className="pb-20">
+            <ContactForm title="Chcesz zapytać o praktyki?" />
+          </section>
+        </motion.div>
+      )}
     </div >
   );
 };
