@@ -2,25 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Check, ArrowRight, Code2, BrainCircuit, Users, Terminal, LucideIcon } from 'lucide-react';
 import { supabase } from '../supabaseClient';
-import { InternshipPath as DBInternshipPath, TimelineEvent, Faq } from '../types/database';
-import { GlassCard, SectionHeader, SketchyButton, Tag } from '../components/UI';
-import { FloatingShapes } from '../components/FloatingShapes';
+import { InternshipPath as DBInternshipPath, TimelineEvent, ProgramGoal, InternshipRule, InternshipPathWithIcon } from '../types/database';
+import { GlassCard, SectionHeader, Tag } from '../components/UI';
 import { useAccordion } from '../hooks/useAccordion';
 
-// Mapping utility for icons (since we store icon names in DB)
 const ICON_MAP: Record<string, LucideIcon> = {
   Code2, BrainCircuit, Users, Terminal
 };
 
-// Hardcoded content removed - fetched from DB
+
 
 
 const InternshipPage = () => {
   const accordion = useAccordion(0);
-  const [paths, setPaths] = useState<any[]>([]);
-  const [timeline, setTimeline] = useState<any[]>([]);
-  const [programGoals, setProgramGoals] = useState<{ title: string, value: string, subtitle: string }[]>([]);
-  const [rules, setRules] = useState<{ rule: string }[]>([]);
+  const [paths, setPaths] = useState<InternshipPathWithIcon[]>([]);
+  const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
+  const [programGoals, setProgramGoals] = useState<ProgramGoal[]>([]);
+  const [rules, setRules] = useState<InternshipRule[]>([]);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -34,13 +32,13 @@ const InternshipPage = () => {
       if (pathsRes.data) {
         setPaths((pathsRes.data as DBInternshipPath[]).map(p => ({
           ...p,
-          icon: ICON_MAP[p.icon_name] || Code2 // Fallback icon
+          icon: ICON_MAP[p.icon_name] || Code2
         })));
       }
 
       if (timelineRes.data) setTimeline(timelineRes.data as TimelineEvent[]);
-      if (goalsRes.data) setProgramGoals(goalsRes.data as { title: string, value: string, subtitle: string }[]);
-      if (rulesRes.data) setRules(rulesRes.data as { rule: string }[]);
+      if (goalsRes.data) setProgramGoals(goalsRes.data as ProgramGoal[]);
+      if (rulesRes.data) setRules(rulesRes.data as InternshipRule[]);
     };
     fetchContent();
   }, []);
@@ -49,7 +47,6 @@ const InternshipPage = () => {
     <div className="space-y-24">
       {/* HERO */}
       <section className="relative min-h-[60vh] flex flex-col justify-center items-center text-center pt-10 perspective-1000">
-        <FloatingShapes />
 
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -128,13 +125,13 @@ const InternshipPage = () => {
           <SectionHeader title="Oś czasu" subtitle="Szybka ścieżka do kariery" />
           <div className="flex flex-col md:flex-row justify-between items-start md:items-start relative gap-8 md:gap-0">
             <div className="hidden md:block absolute top-[23px] left-0 w-full h-1 border-t-2 border-dashed border-lime-400/30 -z-10" />
-            
+
             {/* Mobile Vertical Line */}
             <div className="md:hidden absolute left-1/2 top-0 bottom-0 w-0.5 border-l-2 border-dashed border-lime-400/30 -translate-x-1/2 -z-10" />
 
             {timeline.map((step, i) => (
               <div key={i} className="grid grid-cols-[1fr_auto_1fr] md:flex md:flex-col gap-4 md:gap-2 items-center group w-full md:w-auto">
-                
+
                 {/* Mobile Left Text (Odd index) */}
                 <div className={`md:hidden text-right ${i % 2 !== 0 ? 'opacity-100' : 'opacity-0'}`}>
                   {i % 2 !== 0 && (
@@ -236,7 +233,9 @@ const InternshipPage = () => {
                             </div>
 
                             <div className="mt-8">
-                              <SketchyButton className="w-full text-center text-sm py-3 justify-center">Aplikuj na {item.title}</SketchyButton>
+                              <button className="w-full px-6 py-3 bg-lime-400 hover:bg-lime-300 text-emerald-950 font-bold rounded-lg transition-all duration-300 shadow-[0_0_15px_rgba(132,204,22,0.3)] flex justify-center items-center gap-2 text-sm">
+                                Aplikuj na {item.title} <ArrowRight size={18} />
+                              </button>
                             </div>
                           </div>
                         </div>

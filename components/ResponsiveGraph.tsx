@@ -1,13 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-// Remove hardcoded DATA
-// const DATA = ...
-
 const WIDTH = 800;
 const HEIGHT = 300;
 const PADDING = { top: 20, right: 30, bottom: 40, left: 30 };
-const MAX_COUNT = 180; // This might need to be dynamic too, but fixed is okay for now or max+buffer
+const MAX_COUNT = 180;
 
 interface GraphPoint {
     year: number;
@@ -25,7 +22,6 @@ export const ResponsiveGraph: React.FC<ResponsiveGraphProps> = ({ data }) => {
     const minYear = sortedData[0].year;
     const maxYear = sortedData[sortedData.length - 1].year;
 
-    // Calculate max count dynamically for scale, with some buffer
     const maxVal = Math.max(...data.map(d => d.count)) * 1.1;
 
     const getX = (year: number) => PADDING.left + ((year - minYear) / (maxYear - minYear)) * (WIDTH - PADDING.left - PADDING.right);

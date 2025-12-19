@@ -1,7 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, Sparkles, Youtube, Facebook, Linkedin } from 'lucide-react';
+import { Menu, X, Youtube, Facebook, Linkedin } from 'lucide-react';
+import { BackgroundGrid } from './BackgroundGrid';
+import { FloatingShapes } from './FloatingShapes';
 
 const NoiseOverlay = () => (
   <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.07] mix-blend-overlay">
@@ -65,8 +67,8 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${isScrolled
-          ? 'bg-emerald-950/80 backdrop-blur-md shadow-lg py-3 border-emerald-800/50'
-          : 'p-4 md:p-6 pointer-events-none border-transparent'
+        ? 'bg-emerald-950/80 backdrop-blur-md shadow-lg py-3 border-emerald-800/50'
+        : 'p-4 md:p-6 pointer-events-none border-transparent'
         }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -77,7 +79,7 @@ const Navbar = () => {
           className="flex-shrink-0 pointer-events-auto"
         >
           <div className="flex items-center gap-2 cursor-pointer group">
-            
+
             <span className="font-sans font-bold text-xl tracking-tight text-white">
               Rekord<span className="text-lime-400">IT</span>
             </span>
@@ -101,8 +103,8 @@ const Navbar = () => {
                     )}
                     <span
                       className={`relative z-10 font-sans font-medium text-xs tracking-wider uppercase transition-colors duration-200 ${isActive
-                          ? 'text-emerald-950 font-bold'
-                          : 'text-emerald-100/70 hover:text-white'
+                        ? 'text-emerald-950 font-bold'
+                        : 'text-emerald-100/70 hover:text-white'
                         }`}
                     >
                       {link.label}
@@ -169,6 +171,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     <div className="min-h-screen text-white relative flex flex-col overflow-x-hidden">
       <NoiseOverlay />
       <GradientBackground />
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <BackgroundGrid />
+        <FloatingShapes />
+      </div>
       <Navbar />
       <main className="pt-28 pb-20 px-4 max-w-7xl mx-auto relative z-10 w-full flex-grow">
         {children}
@@ -182,7 +188,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             {/* Brand Column */}
             <div className="md:col-span-5 lg:col-span-6 space-y-6">
               <div className="flex items-center gap-3 mb-6">
-                
+
                 <span className="font-sans font-bold text-2xl tracking-tight text-white">
                   Rekord<span className="text-lime-400">IT</span>
                 </span>

@@ -58,3 +58,40 @@ export interface TimelineEvent {
     category: 'recruitment' | 'practices' | 'internship';
     align?: 'left' | 'right' | 'center';
 }
+
+export interface Memory {
+    id: string;
+    year: string;
+    label: string;
+    image_url?: string;
+}
+
+export interface InternshipProject {
+    id: string;
+    year: string;
+    title: string;
+    goal?: string;
+    tools?: string;
+    skills?: string;
+    team: string;
+    created_at?: string;
+}
+
+export interface ProgramGoal {
+    id: string;
+    title: string;
+    value: string;
+    subtitle: string;
+    display_order: number;
+}
+
+export interface InternshipRule {
+    id: string;
+    rule: string;
+    display_order: number;
+}
+
+export interface InternshipPathWithIcon extends InternshipPath {
+    icon: React.ComponentType<{ size?: number }>;
+}
+

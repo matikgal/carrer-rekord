@@ -10,8 +10,8 @@ interface AdminSectionProps<T> {
     description?: string;
     fields: FieldConfig[];
     columns: any[];
-    orderBy?: string; // column to order by
-    filterBy?: keyof T; // column to filter by
+    orderBy?: string;
+    filterBy?: keyof T;
 }
 
 export const AdminSection = <T extends { id: string } & Record<string, any>>({ tableName, title, description, fields, columns, orderBy = 'created_at', filterBy }: AdminSectionProps<T>) => {
@@ -20,7 +20,6 @@ export const AdminSection = <T extends { id: string } & Record<string, any>>({ t
     const [editingItem, setEditingItem] = useState<Partial<T> | null>(null);
     const [activeFilter, setActiveFilter] = useState<string>('all');
 
-    // Delete Modal State
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<T | null>(null);
 
@@ -31,17 +30,14 @@ export const AdminSection = <T extends { id: string } & Record<string, any>>({ t
         setLoading(false);
     };
 
-    // Derive unique filter values (e.g., categories)
     const filterOptions = filterBy
         ? ['all', ...Array.from(new Set(data.map(item => String(item[filterBy]))))]
         : [];
 
-    // Reset filter when changing sections
     useEffect(() => {
         setActiveFilter('all');
     }, [tableName]);
 
-    // Filter data
     const filteredData = (!filterBy || activeFilter === 'all')
         ? data
         : data.filter(item => String(item[filterBy]) === activeFilter);

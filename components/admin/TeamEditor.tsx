@@ -21,7 +21,6 @@ export const TeamEditor = () => {
     const [success, setSuccess] = useState<string | null>(null);
     const [deleteId, setDeleteId] = useState<string | null>(null);
 
-    // Fetch team members
     const fetchTeam = async () => {
         try {
             setLoading(true);
@@ -44,7 +43,6 @@ export const TeamEditor = () => {
         fetchTeam();
     }, []);
 
-    // Add new team member OR Create new user
     const handleAddMember = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!newAdminInput) return;
@@ -54,7 +52,6 @@ export const TeamEditor = () => {
             setSuccess(null);
             let targetUserId = newAdminInput.trim();
 
-            // 1. If Password provided -> Create New User
             if (newAdminPassword) {
                 if (!targetUserId.includes('@')) {
                     throw new Error('Do rejestracji wymagany jest poprawny adres email.');
@@ -66,10 +63,9 @@ export const TeamEditor = () => {
                     });
 
                 if (createError) throw createError;
-                targetUserId = data; // New User ID
+                targetUserId = data;
                 setSuccess(`Utworzono nowego użytkownika: ${newAdminInput}`);
             }
-            // 2. If No Password -> Resolve Email to UUID (Existing User)
             else if (targetUserId.includes('@')) {
                 const { data, error: rpcError } = await supabase
                     .rpc('get_user_id_by_email', { user_email: targetUserId });
@@ -80,13 +76,11 @@ export const TeamEditor = () => {
                 targetUserId = data;
             }
 
-            // 3. Add Role to Admins table
             const { error } = await supabase
                 .from('admins')
                 .insert([{ id: targetUserId, role: newAdminRole }]);
 
             if (error) {
-                // If user is already in team
                 if (error.code === '23505') throw new Error('Ten użytkownik jest już w zespole.');
                 throw error;
             }
@@ -100,12 +94,10 @@ export const TeamEditor = () => {
         }
     };
 
-    // Remove team member (and delete account)
     const handleRemoveMember = async () => {
         if (!deleteId) return;
 
         try {
-            // Call the secure RPC to delete the user completely (Auth + Admin table)
             const { error } = await supabase
                 .rpc('delete_user_completely', { target_user_id: deleteId });
 
@@ -119,7 +111,6 @@ export const TeamEditor = () => {
         }
     };
 
-    // Change role
     const handleChangeRole = async (id: string, newRole: 'admin' | 'editor') => {
         try {
             const { error } = await supabase

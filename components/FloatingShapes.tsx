@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 
 export const FloatingShapes: React.FC = () => (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-[-1]">
+        {/* Existing Shapes */}
         <motion.div
             animate={{
                 y: [0, -60, 0],
@@ -41,5 +42,35 @@ export const FloatingShapes: React.FC = () => (
         >
             +
         </motion.div>
+
+        {/* New Shapes */}
+        <motion.div
+            animate={{
+                y: [0, 50, 0],
+                rotate: [0, 180, 360],
+                scale: [1, 1.2, 1]
+            }}
+            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[60%] right-[10%] w-16 h-16 border-2 border-emerald-400/30 rotate-45"
+        />
+
+        <motion.div
+            animate={{
+                x: [0, 100, 0],
+                y: [0, -20, 0],
+                opacity: [0.2, 0.5, 0.2]
+            }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            className="absolute bottom-[10%] right-[30%] w-40 h-40 bg-lime-400/5 blur-3xl rounded-full"
+        />
+
+        <motion.div
+            animate={{
+                y: [0, -40, 0],
+                rotate: [0, -10, 0]
+            }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[80%] left-[5%] w-20 h-20 border-t-4 border-r-4 border-lime-400/20 rounded-tr-3xl"
+        />
     </div>
 );

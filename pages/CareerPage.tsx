@@ -5,7 +5,6 @@ import { supabase } from '../supabaseClient';
 import { JobOffer as DBJobOffer, Faq, CompanyValue, TimelineEvent, VideoItem } from '../types/database';
 
 import { GlassCard, SectionHeader } from '../components/UI';
-import { BackgroundGrid } from '../components/BackgroundGrid';
 import { VideoModal } from '../components/VideoModal';
 import { ResponsiveGraph } from '../components/ResponsiveGraph';
 import { ContactForm } from '../components/ContactForm';
@@ -14,6 +13,7 @@ import { JobOfferCard, JobOffer } from '../components/JobOfferCard';
 import { ProcessTimeline } from '../components/ProcessTimeline';
 import { VideoGallery } from '../components/VideoGallery';
 import { ValuesCarousel } from '../components/ValuesCarousel';
+import { FloatingShapes } from '../components/FloatingShapes';
 import { useAccordion } from '../hooks/useAccordion';
 
 const CareerPage = () => {
@@ -102,20 +102,13 @@ const CareerPage = () => {
     <div className="space-y-24">
       {/* HERO SECTION */}
       <section className="min-h-[85vh] w-[100vw] ml-[calc(50%-50vw)] flex flex-col justify-center items-center text-center relative overflow-hidden">
-        <BackgroundGrid />
-
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="relative z-10 max-w-5xl px-6 mx-auto"
         >
-          {/* <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lime-400/20 bg-lime-400/5 backdrop-blur-sm mb-10">
-            <span className="w-2 h-2 rounded-full bg-lime-500 animate-pulse" />
-            <span className="text-lime-400 font-mono text-xs font-medium tracking-wide uppercase">
-              Rekrutacja Otwarta
-            </span>
-          </div> */}
+
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium mb-8 leading-[1.1] tracking-tight text-white">
             <span className="font-serif italic text-emerald-200 block mb-2">Rozwijaj się z</span>
@@ -176,7 +169,7 @@ const CareerPage = () => {
                 ))
               ) : (
                 <>
-                  {/* Fallback skeletal loading or default */}
+
                   <div>
                     <div className="text-5xl font-bold text-white mb-2">...</div>
                     <div className="text-xs font-bold text-lime-400 uppercase tracking-widest">Ładowanie...</div>

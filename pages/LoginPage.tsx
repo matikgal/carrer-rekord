@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
 import { supabase } from '../supabaseClient';
-import { SectionHeader, SketchyButton, GlassCard } from '../components/UI';
-import { BackgroundGrid } from '../components/BackgroundGrid';
+import { SectionHeader, GlassCard } from '../components/UI';
+import { ArrowRight } from 'lucide-react';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -39,7 +39,6 @@ const LoginPage = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-            <BackgroundGrid />
             <div className="w-full max-w-md px-4 relative z-10">
                 <GlassCard className="p-8 border-2 border-emerald-500/30">
                     <SectionHeader title="Panel Admina" subtitle="Zaloguj się, aby zarządzać treścią." />
@@ -75,13 +74,13 @@ const LoginPage = () => {
                             </div>
                         )}
 
-                        <SketchyButton
-                            primary
-                            className="w-full justify-center"
+                        <button
+                            type="submit"
                             disabled={loading}
+                            className="w-full px-8 py-3 bg-lime-400 hover:bg-lime-300 text-emerald-950 font-bold rounded-lg transition-all duration-300 shadow-[0_0_15px_rgba(132,204,22,0.3)] flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {loading ? 'Logowanie...' : 'Zaloguj się'}
-                        </SketchyButton>
+                            {loading ? 'Logowanie...' : 'Zaloguj się'} {!loading && <ArrowRight size={20} />}
+                        </button>
                     </form>
                 </GlassCard>
             </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import { SectionHeader, GlassCard } from '../components/UI';
-import { BackgroundGrid } from '../components/BackgroundGrid';
+import { OfferEditor } from '../components/admin/OfferEditor';
 import { LogOut, LayoutGrid, MessageSquare, Heart, Video, Calendar, Users, Briefcase, TrendingUp, Image, Database } from 'lucide-react';
 import { useAuth } from '../context/AuthProvider';
 
@@ -235,7 +235,6 @@ const AdminPage = () => {
 
     return (
         <div className="min-h-screen relative pt-20 pb-20 px-4">
-            <BackgroundGrid />
             <div className="max-w-7xl mx-auto relative z-10">
 
                 <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
@@ -263,8 +262,7 @@ const AdminPage = () => {
 
                 <div className="grid lg:grid-cols-[250px_1fr] gap-8">
                     {/* Sidebar Navigation */}
-                    {/* Sidebar Navigation */}
-                    <div className="flex flex-col gap-2 mb-8 bg-black/20 p-2 rounded-2xl backdrop-blur-sm sticky top-4 z-50 border border-emerald-800/50 shadow-2xl">
+                    <div className="flex flex-col gap-2 mb-8 bg-black/20 p-2 rounded-2xl backdrop-blur-sm sticky top-4 z-50 border border-emerald-800/50 shadow-2xl self-start h-fit">
                         {ALL_TABS.filter(tab => tab.id !== 'team' || isAdmin).map((tab) => {
                             const Icon = tab.icon;
                             const isActive = activeTab === tab.id;

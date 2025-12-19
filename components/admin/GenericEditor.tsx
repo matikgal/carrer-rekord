@@ -19,12 +19,15 @@ interface GenericEditorProps<T> {
     onCancel: () => void;
 }
 
-export const GenericEditor = <T extends {}>({ initialData, fields, onSave, onCancel }: GenericEditorProps<T>) => {
-    const [formData, setFormData] = useState<any>(initialData);
+type FormValue = string | number | string[] | undefined;
+type FormData = Record<string, FormValue>;
+
+export const GenericEditor = <T extends Record<string, FormValue>>({ initialData, fields, onSave, onCancel }: GenericEditorProps<T>) => {
+    const [formData, setFormData] = useState<FormData>(initialData as FormData);
     const [uploading, setUploading] = useState(false);
 
-    const handleChange = (key: string, value: any) => {
-        setFormData((prev: any) => ({ ...prev, [key]: value }));
+    const handleChange = (key: string, value: FormValue) => {
+        setFormData((prev) => ({ ...prev, [key]: value }));
     };
 
     const handleArrayChange = (key: string, value: string) => {
@@ -54,7 +57,7 @@ export const GenericEditor = <T extends {}>({ initialData, fields, onSave, onCan
     };
 
     return (
-        <form onSubmit={(e) => { e.preventDefault(); onSave(formData); }} className="space-y-6">
+        <form onSubmit={(e) => { e.preventDefault(); onSave(formData as unknown as Partial<T>); }} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
                 {fields.map(field => (
                     <div key={field.key} className={field.type === 'textarea' || field.type === 'array' ? "md:col-span-2" : ""}>
@@ -99,7 +102,7 @@ export const GenericEditor = <T extends {}>({ initialData, fields, onSave, onCan
                                 {formData[field.key] ? (
                                     <div className="relative inline-block group">
                                         <img
-                                            src={formData[field.key]}
+                                            src={formData[field.key] as string}
                                             alt="Preview"
                                             className="h-32 w-auto object-cover rounded-lg border border-lime-400/20 shadow-lg"
                                         />
@@ -135,7 +138,7 @@ export const GenericEditor = <T extends {}>({ initialData, fields, onSave, onCan
                             <div className="relative">
                                 <textarea
                                     className="w-full bg-emerald-950 border border-emerald-700 rounded p-3 text-white focus:border-lime-400 outline-none h-24 font-mono text-sm"
-                                    value={Array.isArray(formData[field.key]) ? formData[field.key].join('; ') : ''}
+                                    value={Array.isArray(formData[field.key]) ? (formData[field.key] as string[]).join('; ') : ''}
                                     onChange={e => handleArrayChange(field.key, e.target.value)}
                                     placeholder="Wartość 1; Wartość 2; Wartość 3..."
                                 />

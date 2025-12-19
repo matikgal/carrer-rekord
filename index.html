@@ -1,67 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SketchyTech Careers</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Importing 'Plus Jakarta Sans' for a modern, professional enterprise look -->
-    <!-- Importing IBM Plex family for a serious, enterprise-grade look -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['"IBM Plex Sans"', 'sans-serif'],
-              serif: ['"IBM Plex Serif"', 'serif'],
-              mono: ['"IBM Plex Mono"', 'monospace'],
-            },
-            colors: {
-              emerald: {
-                950: '#022c22',
-              }
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kariera Rekord</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"IBM Plex Sans"', 'sans-serif'],
+            serif: ['"IBM Plex Serif"', 'serif'],
+            mono: ['"IBM Plex Mono"', 'monospace'],
+          },
+          colors: {
+            emerald: {
+              950: '#022c22',
             }
           }
         }
       }
-    </script>
-    <style>
-      body {
-        font-family: "IBM Plex Sans", sans-serif;
-        background-color: #022c22; /* Deep Emerald */
-      }
-      
-      /* Utilities for specific font usage if needed outside Tailwind */
-      .font-serif-custom {
-        font-family: "IBM Plex Serif", serif;
-      }
-      .font-mono-custom {
-        font-family: "IBM Plex Mono", monospace;
-      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: "IBM Plex Sans", sans-serif;
+      background-color: #022c22;
+      /* Deep Emerald */
+    }
 
-      /* Custom scrollbar - darker, more professional */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #022c22;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #064e3b; /* darker emerald */
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #10b981;
-      }
-    </style>
-    <script type="importmap">
+    /* Utilities for specific font usage if needed outside Tailwind */
+    .font-serif-custom {
+      font-family: "IBM Plex Serif", serif;
+    }
+
+    .font-mono-custom {
+      font-family: "IBM Plex Mono", monospace;
+    }
+
+    /* Custom scrollbar - darker, more professional */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #022c22;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #064e3b;
+      /* darker emerald */
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #10b981;
+    }
+  </style>
+  <script type="importmap">
       {
         "imports": {
           "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
@@ -73,9 +77,11 @@
         }
       }
     </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
 </html>
