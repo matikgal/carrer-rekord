@@ -29,6 +29,4 @@ Projekt Rekord Career Portal to dedykowana strona kariery ("Career Page"), któr
 ## Kontakt
 
 <br>
-_Stworzone przez_
-_Mateusz Gałuszka_
-_Jakub Gałosz_
+_Stworzone przez Mateusz Gałuszka Jakub Gałosz_
